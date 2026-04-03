@@ -1,0 +1,98 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-50: #f0f9ff;
+  --color-brand-100: #e0f2fe;
+  --color-brand-200: #bae6fd;
+  --color-brand-500: #0ea5e9;
+  --color-brand-600: #0284c7;
+  --color-brand-700: #0369a1;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+body {
+  background-color: #f9fafb;
+  color: #111827;
+}
+
+/* Drag ghost */
+.drag-ghost {
+  opacity: 0.5;
+}
+
+/* Row hover reveal */
+.row-actions {
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+tr:hover .row-actions,
+.item-row:hover .row-actions {
+  opacity: 1;
+}
+
+/* KPI animated border (Eldora-style) */
+@property --ga {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+@keyframes spin-ga {
+  to { --ga: 360deg; }
+}
+@keyframes kpi-ping {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  60%       { transform: scale(2.2); opacity: 0; }
+}
+.kpi-wrap {
+  border-radius: 14px;
+  padding: 1.5px;
+  background: conic-gradient(
+    from var(--ga),
+    #e2e8f0 60%,
+    #94a3b8 73%,
+    #64748b 80%,
+    #475569 87%,
+    #e2e8f0 95%
+  );
+  animation: spin-ga 5s linear infinite;
+}
+.kpi-wrap.positive {
+  background: conic-gradient(
+    from var(--ga),
+    #dcfce7 60%,
+    #86efac 73%,
+    #22c55e 80%,
+    #16a34a 87%,
+    #dcfce7 95%
+  );
+}
+.kpi-wrap.negative {
+  background: conic-gradient(
+    from var(--ga),
+    #fee2e2 60%,
+    #fca5a5 73%,
+    #ef4444 80%,
+    #dc2626 87%,
+    #fee2e2 95%
+  );
+}
+.kpi-ping-dot {
+  position: relative;
+  display: inline-flex;
+}
+.kpi-ping-dot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  animation: kpi-ping 2s ease infinite;
+  background: inherit;
+}
+
+@media print {
+  .no-print { display: none !important; }
+  body { background: white !important; }
+  .kpi-wrap { animation: none; background: #e2e8f0; }
+}
