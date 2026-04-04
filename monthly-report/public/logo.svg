@@ -1,40 +1,27 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 130" fill="none">
-  <!-- Background -->
-  <rect width="120" height="130" rx="10" fill="#0a0a0a"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 151 146" fill="none">
+  <rect width="151" height="146" rx="12" fill="#0a0a0a"/>
 
   <!-- LEFT FIGURE (yellow/amber) -->
-  <!-- Head -->
-  <circle cx="30" cy="20" r="8" fill="#F5C518"/>
-  <!-- Left arm up-left -->
-  <path d="M30 28 L14 14" stroke="#F5C518" stroke-width="5" stroke-linecap="round"/>
-  <!-- Right arm up-right toward center -->
-  <path d="M30 28 L44 18" stroke="#F5C518" stroke-width="5" stroke-linecap="round"/>
-  <!-- Body -->
-  <path d="M30 28 L30 58" stroke="#F5C518" stroke-width="5" stroke-linecap="round"/>
-  <!-- Left leg -->
-  <path d="M30 58 L20 75" stroke="#F5C518" stroke-width="4.5" stroke-linecap="round"/>
-  <!-- Right leg -->
-  <path d="M30 58 L38 75" stroke="#F5C518" stroke-width="4.5" stroke-linecap="round"/>
+  <circle cx="32" cy="22" r="9" fill="#F7C413"/>
+  <path d="M32 31 L15 16" stroke="#F7C413" stroke-width="5.5" stroke-linecap="round"/>
+  <path d="M32 31 L47 20" stroke="#F7C413" stroke-width="5.5" stroke-linecap="round"/>
+  <path d="M32 31 L32 63" stroke="#F7C413" stroke-width="5.5" stroke-linecap="round"/>
+  <path d="M32 63 L21 82" stroke="#F7C413" stroke-width="5" stroke-linecap="round"/>
+  <path d="M32 63 L41 82" stroke="#F7C413" stroke-width="5" stroke-linecap="round"/>
 
   <!-- RIGHT FIGURE (green) -->
-  <!-- Head -->
-  <circle cx="90" cy="20" r="8" fill="#22C55E"/>
-  <!-- Right arm up-right -->
-  <path d="M90 28 L106 14" stroke="#22C55E" stroke-width="5" stroke-linecap="round"/>
-  <!-- Left arm up-left toward center -->
-  <path d="M90 28 L76 18" stroke="#22C55E" stroke-width="5" stroke-linecap="round"/>
-  <!-- Body -->
-  <path d="M90 28 L90 58" stroke="#22C55E" stroke-width="5" stroke-linecap="round"/>
-  <!-- Left leg -->
-  <path d="M90 58 L82 75" stroke="#22C55E" stroke-width="4.5" stroke-linecap="round"/>
-  <!-- Right leg -->
-  <path d="M90 58 L98 75" stroke="#22C55E" stroke-width="4.5" stroke-linecap="round"/>
+  <circle cx="119" cy="22" r="9" fill="#0D8944"/>
+  <path d="M119 31 L136 16" stroke="#0D8944" stroke-width="5.5" stroke-linecap="round"/>
+  <path d="M119 31 L104 20" stroke="#0D8944" stroke-width="5.5" stroke-linecap="round"/>
+  <path d="M119 31 L119 63" stroke="#0D8944" stroke-width="5.5" stroke-linecap="round"/>
+  <path d="M119 63 L110 82" stroke="#0D8944" stroke-width="5" stroke-linecap="round"/>
+  <path d="M119 63 L128 82" stroke="#0D8944" stroke-width="5" stroke-linecap="round"/>
 
   <!-- CENTER TEARDROP (blue) -->
-  <path d="M60 10 C60 10 76 30 76 48 C76 58.5 68.8 66 60 66 C51.2 66 44 58.5 44 48 C44 30 60 10 60 10Z" fill="#1D72E8"/>
-  <!-- White 'e' symbol inside teardrop -->
-  <text x="60" y="55" text-anchor="middle" fill="white" font-size="18" font-weight="700" font-family="Arial, sans-serif">e</text>
+  <path d="M75.5 8 C75.5 8 94 30 94 52 C94 63.6 85.8 72 75.5 72 C65.2 72 57 63.6 57 52 C57 30 75.5 8 75.5 8Z" fill="#5892CD"/>
+  <!-- White 'e' inside teardrop -->
+  <text x="75.5" y="62" text-anchor="middle" fill="white" font-size="20" font-weight="700" font-family="Arial, sans-serif">e</text>
 
   <!-- WETRIALS TEXT -->
-  <text x="60" y="98" text-anchor="middle" fill="white" font-size="13" font-weight="600" font-family="Arial, sans-serif" letter-spacing="0.5">WeTrials</text>
+  <text x="75.5" y="108" text-anchor="middle" fill="white" font-size="14" font-weight="600" font-family="Arial, sans-serif" letter-spacing="0.5">WeTrials</text>
 </svg>
