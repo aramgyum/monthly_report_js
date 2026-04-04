@@ -7,32 +7,52 @@
   --color-brand-500: #3b82f6;
   --color-brand-600: #2563eb;
   --color-brand-700: #1d4ed8;
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
 }
 
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
 
 * { box-sizing: border-box; }
 
 body {
   background-color: #f8fafc;
-  color: #0f172a;
+  color: #1f2937;
   font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
-/* Row delete button — reveal on hover */
-.row-del {
-  opacity: 0;
-  transition: opacity 0.12s;
+/* Read-only mode: hide input chrome */
+.read-mode input,
+.read-mode textarea,
+.read-mode select {
+  pointer-events: none !important;
+  border-color: transparent !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  resize: none !important;
+  cursor: default !important;
+  -webkit-appearance: none;
+  appearance: none;
 }
-.item-row:hover .row-del {
-  opacity: 1;
+.read-mode select {
+  padding-right: 0.625rem !important;
+  background-image: none !important;
 }
+.read-mode .no-edit { display: none !important; }
+.read-mode .dir-btn { pointer-events: none; }
 
-/* Print */
+/* Edit mode: show controls */
+.edit-mode .read-only-hide { display: none; }
+
+/* Row controls reveal */
+.row-del { opacity: 0; transition: opacity 0.1s; }
+.item-row:hover .row-del { opacity: 1; }
+
+/* Textarea resize */
+textarea { resize: vertical; min-height: 2.25rem; }
+
 @media print {
   .no-print { display: none !important; }
   body { background: white !important; }
   header { position: static !important; }
+  .item-row { break-inside: avoid; }
 }
