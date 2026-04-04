@@ -65,28 +65,46 @@ export const CATEGORY_CONFIG = {
   "other":          { label: "Other"          },
 };
 
+export const MILESTONE_STATUS_CONFIG = {
+  completed:    { label: "Completed",   cls: BADGE.done       },
+  "in-progress":{ label: "In Progress", cls: BADGE.inProgress },
+  planned:      { label: "Planned",     cls: BADGE.planned    },
+};
+
+export const PARTNER_ENGAGEMENT_CONFIG = {
+  active:     { label: "Active",     cls: BADGE.done       },
+  exploring:  { label: "Exploring",  cls: BADGE.inProgress },
+  paused:     { label: "Paused",     cls: BADGE.pending    },
+  completed:  { label: "Completed",  cls: BADGE.neutral    },
+};
+
 // ── Makers ────────────────────────────────────────────────────────────────────
-export const makeExecItem     = () => ({ id: newId(), title: "", summary: "", impact: "medium", direction: "neutral", details: "", detailsOpen: false });
-export const makeInsightItem  = () => ({ id: newId(), title: "", summary: "", impact: "medium", direction: "neutral" });
-export const makeDelivery     = () => ({ id: newId(), title: "", status: "in-progress", priority: "medium", category: "other", notes: "" });
-export const makeRisk         = () => ({ id: newId(), text: "", severity: "medium", mitigation: "", owner: "" });
-export const makeKPI          = () => ({ id: newId(), label: "New KPI", value: "", prevValue: "", prevLabel: "Prev", nowLabel: "Now", sub: "" });
-export const makeCustomModule = () => ({ id: newId(), title: "New Module", description: "", items: [] });
-export const makeModuleItem   = () => ({ id: newId(), text: "", status: "in-progress" });
+export const makeExecItem          = () => ({ id: newId(), title: "", summary: "", impact: "medium", direction: "neutral", details: "", detailsOpen: false });
+export const makeInsightItem       = () => ({ id: newId(), title: "", summary: "", impact: "medium", direction: "neutral" });
+export const makeDelivery          = () => ({ id: newId(), title: "", status: "in-progress", priority: "medium", notes: "" });
+export const makeRisk              = () => ({ id: newId(), text: "", severity: "medium", mitigation: "", owner: "" });
+export const makeKPI               = () => ({ id: newId(), label: "New KPI", value: "", prevValue: "", prevLabel: "Prev", nowLabel: "Now", sub: "" });
+export const makeCustomModule      = () => ({ id: newId(), title: "New Module", description: "", items: [] });
+export const makeModuleItem        = () => ({ id: newId(), text: "", status: "in-progress" });
+export const makePartnerMilestone  = () => ({ id: newId(), partner: "", milestone: "", status: "in-progress", note: "" });
+export const makeComingMonthItem   = () => ({ id: newId(), text: "" });
+export const makePartner           = () => ({ id: newId(), name: "", engagement: "active", description: "" });
 
 export const makeMonthData = () => ({
-  executiveSummary: "",
+  executiveSummary:     "",
   kpis: [
     { id: newId(), label: "Total Users",     value: "", prevValue: "", sub: "Registered"   },
     { id: newId(), label: "User Requests",   value: "", prevValue: "", sub: "All time"     },
     { id: newId(), label: "Total Studies",   value: "", prevValue: "", sub: "Study DB"     },
     { id: newId(), label: "Active Partners", value: "", prevValue: "", sub: "With updates" },
   ],
-  insights:          [],
-  delivery:          [],
-  risks:             [],
-  nextMonthPriorities: [],
-  customModules:     [],
+  insights:             [],
+  delivery:             [],
+  partnerMilestones:    [],
+  comingMonthItems:     [],
+  risks:                [],
+  partners:             [],
+  customModules:        [],
 });
 
 // ── Storage helpers ───────────────────────────────────────────────────────────

@@ -6,6 +6,7 @@ import {
   GripVertical, Plus, X, Printer, Save, Pencil, Check,
   TrendingUp, TrendingDown, Minus, ChevronDown, ChevronUp,
   BookOpen, BarChart3, Activity, AlertTriangle, Zap, Folder, Lock,
+  Handshake, CalendarCheck, Users,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { MONTHS, pctChange, newId } from "@/lib/utils";
@@ -13,8 +14,10 @@ import {
   PASSWORD, STORAGE_KEY,
   IMPACT_CONFIG, DIRECTION_CONFIG, STATUS_CONFIG,
   SEVERITY_CONFIG, PRIORITY_CONFIG,
+  MILESTONE_STATUS_CONFIG, PARTNER_ENGAGEMENT_CONFIG,
   makeInsightItem, makeDelivery, makeRisk,
   makeKPI, makeCustomModule, makeModuleItem, makeMonthData,
+  makePartnerMilestone, makeComingMonthItem, makePartner,
   monthKey, loadStore, saveStore,
 } from "@/lib/data";
 
@@ -222,14 +225,24 @@ function Card({ className, children }) {
 // ─────────────────────────────────────────────────────────────────────────────
 // INSIGHT ROW  (Key Business Insights)
 // ─────────────────────────────────────────────────────────────────────────────
+function FieldLabel({ children, title }) {
+  return (
+    <span className="text-xs font-semibold uppercase tracking-wider text-gray-300 select-none" title={title}>
+      {children}
+    </span>
+  );
+}
+
 function InsightRow({ item, editMode, onUpdate, onDelete, provided, snapshot }) {
   return (
     <div ref={provided.innerRef} {...provided.draggableProps}
-      className={cn("item-row flex items-start gap-3 px-5 py-4 group hover:bg-gray-50 transition-colors",
+      className={cn("item-row flex items-start gap-3 px-5 py-4 group hover:bg-gray-50/60 transition-colors",
         snapshot.isDragging && "bg-white shadow-lg rounded-2xl")}>
       <DragHandle {...provided.dragHandleProps} />
+
       {/* Left: title + summary */}
-      <div className="flex-1 min-w-0 space-y-2">
+      <div className="flex-1 min-w-0 space-y-1.5">
+        <FieldLabel title="The headline or finding for this insight">Title</FieldLabel>
         <TA editMode={editMode} value={item.title}
           onChange={e => onUpdate("title", e.target.value)}
           placeholder="Insight title…" rows={1}
@@ -238,15 +251,22 @@ function InsightRow({ item, editMode, onUpdate, onDelete, provided, snapshot }) 
         <TA editMode={editMode} value={item.summary}
           onChange={e => onUpdate("summary", e.target.value)}
           placeholder="What happened and why it matters…" rows={2}
-          className="text-sm text-gray-500" />
+          className="text-sm text-gray-500 mt-1" />
       </div>
-      {/* Right: impact badge + direction toggle + delete */}
-      <div className="flex items-center gap-2 flex-shrink-0 pt-0.5">
-        <SS value={item.impact} onChange={v => onUpdate("impact",v)}
-          options={cfgOpts(IMPACT_CONFIG)} cfg={IMPACT_CONFIG} editMode={editMode} />
-        <DirToggle value={item.direction} onChange={v => onUpdate("direction",v)} editMode={editMode} />
+
+      {/* Right: Impact + Direction */}
+      <div className="flex flex-col items-end gap-2 flex-shrink-0 pt-0.5">
+        <div className="flex items-center gap-1.5">
+          <FieldLabel title="Level of business importance: High / Medium / Low">Impact</FieldLabel>
+          <SS value={item.impact} onChange={v => onUpdate("impact",v)}
+            options={cfgOpts(IMPACT_CONFIG)} cfg={IMPACT_CONFIG} editMode={editMode} />
+        </div>
+        <div className="flex items-center gap-1.5">
+          <FieldLabel title="Trend direction: Positive (↑) / Neutral (→) / Negative (↓)">Direction</FieldLabel>
+          <DirToggle value={item.direction} onChange={v => onUpdate("direction",v)} editMode={editMode} />
+        </div>
         {editMode && (
-          <button onClick={onDelete} className="text-gray-300 hover:text-red-400 transition-colors p-1 flex-shrink-0">
+          <button onClick={onDelete} className="text-gray-300 hover:text-red-400 transition-colors p-1 mt-1">
             <X size={14}/>
           </button>
         )}
@@ -336,46 +356,45 @@ function KPICard({ k, idx, editMode, onChange, onDelete }) {
           )}
         </div>
 
-        {/* ── Value area ── */}
-        {hasPrev ? (
-          /* Prev → current: prev muted top-left, big value right */
-          <div className="flex items-end gap-3 mb-4">
-            <div className="flex flex-col flex-shrink-0">
-              {/* editable Prev label */}
-              <input readOnly={!editMode} value={k.prevLabel ?? "Prev"}
-                onChange={e => upd("prevLabel", e.target.value)}
-                className="text-xs text-gray-300 font-medium bg-transparent border-0 p-0 focus:outline-none mb-1 w-12" />
-              <input readOnly={!editMode} value={k.prevValue}
-                onChange={e => upd("prevValue", e.target.value)}
-                placeholder="—"
-                style={{ color: "#9ca3af" }}
-                className={cn("text-xl font-semibold focus:outline-none bg-transparent border-0 p-0",
-                  editMode && "border border-gray-200 rounded-lg px-2 py-1 bg-gray-50 focus:border-brand-500 w-20")} />
+        {/* ── Value area — always centred, consistent text-5xl ── */}
+        <div className="flex flex-col items-center justify-center mb-4" style={{ minHeight: "5.5rem" }}>
+          {hasPrev ? (
+            /* Prev → Now: centred column */
+            <div className="flex items-baseline justify-center gap-2 w-full">
+              <div className="flex flex-col items-center flex-shrink-0">
+                <input readOnly={!editMode} value={k.prevLabel ?? "Prev"}
+                  onChange={e => upd("prevLabel", e.target.value)}
+                  className="text-xs text-gray-300 font-medium bg-transparent border-0 p-0 focus:outline-none mb-0.5 text-center w-12" />
+                <input readOnly={!editMode} value={k.prevValue}
+                  onChange={e => upd("prevValue", e.target.value)} placeholder="—"
+                  style={{ color: "#9ca3af" }}
+                  className={cn("text-xl font-semibold text-center focus:outline-none bg-transparent border-0 p-0",
+                    editMode && "border border-gray-200 rounded-lg px-2 py-1 bg-gray-50 focus:border-brand-500 w-20")} />
+              </div>
+              <span className="text-gray-200 text-xl flex-shrink-0">→</span>
+              <div className="flex flex-col items-center">
+                <span className="text-xs text-gray-400 font-medium mb-0.5 invisible select-none">·</span>
+                <input readOnly={!editMode} value={k.value}
+                  onChange={e => upd("value", e.target.value)} placeholder="—"
+                  className={cn(numInput("text-5xl text-center"),
+                    editMode && "border border-gray-200 rounded-lg px-2 py-1 focus:border-brand-500")} />
+              </div>
             </div>
-            <span className="text-gray-300 text-lg mb-1 flex-shrink-0">→</span>
-            <div className="flex-1 min-w-0">
+          ) : (
+            /* No prev — single big centred value */
+            <>
               <input readOnly={!editMode} value={k.value}
-                onChange={e => upd("value", e.target.value)}
-                placeholder="—"
-                className={cn(numInput("text-5xl"),
-                  editMode && "border border-gray-200 rounded-lg px-2 py-1 focus:border-brand-500")} />
-            </div>
-          </div>
-        ) : (
-          /* No prev — big value centred, min height to match prev cards */
-          <div className="flex flex-col items-center justify-center mb-4" style={{ minHeight: "4.5rem" }}>
-            <input readOnly={!editMode} value={k.value}
-              onChange={e => upd("value", e.target.value)}
-              placeholder="—"
-              className={cn("text-center", numInput("text-6xl"),
-                editMode && "border border-gray-200 rounded-xl px-3 py-2 focus:border-brand-500 w-full")} />
-            {editMode && (
-              <input value={k.prevValue} onChange={e => upd("prevValue", e.target.value)}
-                placeholder="+ add previous value"
-                className="mt-2 w-full text-xs text-center text-gray-300 border border-dashed border-gray-200 rounded-lg px-2 py-1 bg-transparent focus:outline-none focus:border-brand-400 placeholder:text-gray-300" />
-            )}
-          </div>
-        )}
+                onChange={e => upd("value", e.target.value)} placeholder="—"
+                className={cn("text-center", numInput("text-5xl"),
+                  editMode && "border border-gray-200 rounded-xl px-3 py-2 focus:border-brand-500 w-full")} />
+              {editMode && (
+                <input value={k.prevValue} onChange={e => upd("prevValue", e.target.value)}
+                  placeholder="+ add previous value"
+                  className="mt-2 w-full text-xs text-center text-gray-300 border border-dashed border-gray-200 rounded-lg px-2 py-1 bg-transparent focus:outline-none focus:border-brand-400 placeholder:text-gray-300" />
+              )}
+            </>
+          )}
+        </div>
 
         {/* ── Footer: delta badge + subtitle ── */}
         <div className="flex items-center gap-2 pt-3 border-t border-gray-100 mt-auto">
@@ -605,7 +624,7 @@ export default function Dashboard() {
           {/* Logo + brand */}
           <div className="flex items-center gap-4 flex-1 min-w-0">
             <WeLogo size={44} />
-            <span className="text-xl font-bold text-gray-900 whitespace-nowrap">WeTrials Monthly Report</span>
+            <span className="text-xl font-bold text-gray-900 whitespace-nowrap">WeTrials Product Monthly Report</span>
             <span className="text-gray-200 text-xl">|</span>
             <select value={month} onChange={e => setMonth(+e.target.value)}
               className="text-xl font-bold text-gray-700 border-0 bg-transparent focus:outline-none cursor-pointer">
@@ -673,21 +692,11 @@ export default function Dashboard() {
             onReorder={n => secReorder("insights",n)} />
         </SectionWrap>
 
-        {/* ── 04 PRODUCT & DELIVERY ───────────────────────────────────────── */}
+        {/* ── 04 PRODUCT & DELIVERY ── Insights-style layout ─────────────── */}
         <SectionWrap number={4} title="Product & Delivery" icon={Zap}
           onAdd={editMode ? () => secAdd("delivery", makeDelivery) : null}
           addLabel="Add item">
           <Card>
-            {/* Column labels header */}
-            {data.delivery.length > 0 && (
-              <div className="flex items-center gap-3 px-5 pt-4 pb-2 border-b border-gray-100">
-                <span className="w-4 flex-shrink-0"/>
-                <div className="flex-1 grid gap-4" style={{gridTemplateColumns:"1fr 1fr"}}>
-                  <span className="text-xs font-bold uppercase tracking-widest text-gray-300">Initiative / Feature</span>
-                  <span className="text-xs font-bold uppercase tracking-widest text-gray-300">Notes</span>
-                </div>
-              </div>
-            )}
             <DragDropContext onDragEnd={r => { if (r.destination) secReorder("delivery", reorder(data.delivery, r.source.index, r.destination.index)); }}>
               <Droppable droppableId="delivery">
                 {(prov, snap) => (
@@ -702,34 +711,105 @@ export default function Dashboard() {
                       <Draggable key={item.id} draggableId={item.id} index={idx}>
                         {(prov2, snap2) => (
                           <div ref={prov2.innerRef} {...prov2.draggableProps}
-                            className={cn("item-row flex items-start gap-3 px-5 py-4 group hover:bg-gray-50 transition-colors",
-                              snap2.isDragging && "bg-white shadow-md rounded-2xl")}>
+                            className={cn("item-row flex items-start gap-3 px-5 py-4 group hover:bg-gray-50/60 transition-colors",
+                              snap2.isDragging && "bg-white shadow-lg rounded-2xl")}>
                             <DragHandle {...prov2.dragHandleProps} />
-                            {/* Row body: title+badges left, notes right */}
-                            <div className="flex-1 min-w-0 grid gap-6" style={{gridTemplateColumns:"1fr 1fr"}}>
-                              {/* Left: title + badge row */}
-                              <div className="flex flex-col gap-2 min-w-0">
-                                <TA editMode={editMode} value={item.title}
-                                  onChange={e => secUpd("delivery",idx,"title",e.target.value)}
-                                  placeholder="Initiative or feature name…" rows={1}
-                                  className="font-medium text-gray-900"/>
-                                {/* Compact badge row: Status · Priority */}
-                                <div className="flex items-center gap-2 flex-wrap">
-                                  <SS value={item.status} onChange={v => secUpd("delivery",idx,"status",v)}
-                                    options={cfgOpts(STATUS_CONFIG)} cfg={STATUS_CONFIG} editMode={editMode}/>
-                                  <SS value={item.priority} onChange={v => secUpd("delivery",idx,"priority",v)}
-                                    options={cfgOpts(PRIORITY_CONFIG)} cfg={PRIORITY_CONFIG} editMode={editMode}/>
-                                </div>
+                            {/* Left: title + notes */}
+                            <div className="flex-1 min-w-0 space-y-1.5">
+                              <FieldLabel title="Name of the initiative or feature being delivered">Initiative / Feature</FieldLabel>
+                              <TA editMode={editMode} value={item.title}
+                                onChange={e => secUpd("delivery",idx,"title",e.target.value)}
+                                placeholder="Initiative or feature name…" rows={1}
+                                className="text-base font-semibold text-gray-900"/>
+                              <FieldLabel title="What is happening and why it matters">Notes</FieldLabel>
+                              <TA editMode={editMode} value={item.notes}
+                                onChange={e => secUpd("delivery",idx,"notes",e.target.value)}
+                                placeholder="What is happening and why it matters…" rows={2}
+                                className="text-sm text-gray-500 whitespace-normal break-words"/>
+                            </div>
+                            {/* Right: Priority + Status */}
+                            <div className="flex flex-col items-end gap-2 flex-shrink-0 pt-0.5">
+                              <div className="flex items-center gap-1.5">
+                                <FieldLabel title="Importance level: Highest / High / Medium / Low">Priority</FieldLabel>
+                                <SS value={item.priority} onChange={v => secUpd("delivery",idx,"priority",v)}
+                                  options={cfgOpts(PRIORITY_CONFIG)} cfg={PRIORITY_CONFIG} editMode={editMode}/>
                               </div>
-                              {/* Right: notes (full wrap) */}
-                              <div className="flex items-start gap-2 min-w-0">
-                                <TA editMode={editMode} value={item.notes}
-                                  onChange={e => secUpd("delivery",idx,"notes",e.target.value)}
-                                  placeholder="Notes…" rows={2}
-                                  className="flex-1 text-gray-500 whitespace-normal break-words min-w-0"/>
+                              <div className="flex items-center gap-1.5">
+                                <FieldLabel title="Current delivery status">Progress</FieldLabel>
+                                <SS value={item.status} onChange={v => secUpd("delivery",idx,"status",v)}
+                                  options={cfgOpts(STATUS_CONFIG)} cfg={STATUS_CONFIG} editMode={editMode}/>
+                              </div>
+                              {editMode && (
+                                <button onClick={() => secDel("delivery",idx)}
+                                  className="text-gray-300 hover:text-red-400 transition-colors p-1 mt-1">
+                                  <X size={14}/>
+                                </button>
+                              )}
+                            </div>
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
+                    {prov.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            </DragDropContext>
+          </Card>
+        </SectionWrap>
+
+        {/* ── 05 PARTNER MILESTONES ────────────────────────────────────────── */}
+        <SectionWrap number={5} title="Partner Milestones" icon={Handshake}
+          onAdd={editMode ? () => secAdd("partnerMilestones", makePartnerMilestone) : null}
+          addLabel="Add milestone">
+          <Card>
+            {data.partnerMilestones.length > 0 && (
+              <div className="flex items-center gap-3 px-5 pt-4 pb-2 border-b border-gray-100">
+                <span className="w-4 flex-shrink-0"/>
+                <div className="flex-1 grid gap-4" style={{gridTemplateColumns:"120px 1fr auto auto"}}>
+                  <span className="text-xs font-bold uppercase tracking-widest text-gray-300">Partner</span>
+                  <span className="text-xs font-bold uppercase tracking-widest text-gray-300">Milestone / Achievement</span>
+                  <span className="text-xs font-bold uppercase tracking-widest text-gray-300">Status</span>
+                  <span className="text-xs font-bold uppercase tracking-widest text-gray-300 w-32">Note</span>
+                </div>
+              </div>
+            )}
+            <DragDropContext onDragEnd={r => { if (r.destination) secReorder("partnerMilestones", reorder(data.partnerMilestones, r.source.index, r.destination.index)); }}>
+              <Droppable droppableId="partner-milestones">
+                {(prov, snap) => (
+                  <div ref={prov.innerRef} {...prov.droppableProps}
+                    className={cn("divide-y divide-gray-50", snap.isDraggingOver && "bg-brand-50/20")}>
+                    {data.partnerMilestones.length === 0 && (
+                      <div className="px-5 py-10 text-base text-gray-400 text-center">
+                        {editMode ? "No milestones yet — click Add milestone to create one." : "No milestones."}
+                      </div>
+                    )}
+                    {data.partnerMilestones.map((item, idx) => (
+                      <Draggable key={item.id} draggableId={item.id} index={idx}>
+                        {(prov2, snap2) => (
+                          <div ref={prov2.innerRef} {...prov2.draggableProps}
+                            className={cn("item-row flex items-start gap-3 px-5 py-3.5 group hover:bg-gray-50/60 transition-colors",
+                              snap2.isDragging && "bg-white shadow-md rounded-2xl")}>
+                            <DragHandle {...prov2.dragHandleProps}/>
+                            <div className="flex-1 min-w-0 grid gap-4 items-start" style={{gridTemplateColumns:"120px 1fr auto 128px"}}>
+                              <TA editMode={editMode} value={item.partner}
+                                onChange={e => secUpd("partnerMilestones",idx,"partner",e.target.value)}
+                                placeholder="Partner name…" rows={1}
+                                className="font-semibold text-gray-800 text-sm"/>
+                              <TA editMode={editMode} value={item.milestone}
+                                onChange={e => secUpd("partnerMilestones",idx,"milestone",e.target.value)}
+                                placeholder="Milestone or achievement…" rows={1}
+                                className="text-sm text-gray-700"/>
+                              <SS value={item.status} onChange={v => secUpd("partnerMilestones",idx,"status",v)}
+                                options={cfgOpts(MILESTONE_STATUS_CONFIG)} cfg={MILESTONE_STATUS_CONFIG} editMode={editMode}/>
+                              <div className="flex gap-2 items-start">
+                                <TA editMode={editMode} value={item.note}
+                                  onChange={e => secUpd("partnerMilestones",idx,"note",e.target.value)}
+                                  placeholder="Short note…" rows={1}
+                                  className="flex-1 text-sm text-gray-500"/>
                                 {editMode && (
-                                  <button onClick={() => secDel("delivery",idx)}
-                                    className="text-gray-300 hover:text-red-400 transition-colors pt-2.5 flex-shrink-0">
+                                  <button onClick={() => secDel("partnerMilestones",idx)}
+                                    className="text-gray-300 hover:text-red-400 transition-colors pt-2 flex-shrink-0">
                                     <X size={14}/>
                                   </button>
                                 )}
@@ -747,8 +827,55 @@ export default function Dashboard() {
           </Card>
         </SectionWrap>
 
-        {/* ── 05 RISKS & CONSTRAINTS ──────────────────────────────────────── */}
-        <SectionWrap number={5} title="Risks & Constraints" icon={AlertTriangle}
+        {/* ── 06 COMING MONTH MILESTONES ───────────────────────────────────── */}
+        <SectionWrap number={6} title="Coming Month Priorities" icon={CalendarCheck}
+          onAdd={editMode ? () => secAdd("comingMonthItems", makeComingMonthItem) : null}
+          addLabel="Add priority">
+          <Card>
+            <DragDropContext onDragEnd={r => { if (r.destination) secReorder("comingMonthItems", reorder(data.comingMonthItems, r.source.index, r.destination.index)); }}>
+              <Droppable droppableId="coming-month">
+                {(prov, snap) => (
+                  <div ref={prov.innerRef} {...prov.droppableProps}
+                    className={cn("divide-y divide-gray-50", snap.isDraggingOver && "bg-brand-50/20")}>
+                    {data.comingMonthItems.length === 0 && (
+                      <div className="px-5 py-10 text-base text-gray-400 text-center">
+                        {editMode ? "No priorities yet — click Add priority to create one." : "No priorities set."}
+                      </div>
+                    )}
+                    {data.comingMonthItems.map((item, idx) => (
+                      <Draggable key={item.id} draggableId={item.id} index={idx}>
+                        {(prov2, snap2) => (
+                          <div ref={prov2.innerRef} {...prov2.draggableProps}
+                            className={cn("item-row flex items-center gap-3 px-5 py-3.5 group hover:bg-gray-50/60 transition-colors",
+                              snap2.isDragging && "bg-white shadow-md rounded-2xl")}>
+                            <DragHandle {...prov2.dragHandleProps}/>
+                            <span className="text-gray-300 font-bold text-sm tabular-nums flex-shrink-0">
+                              {String(idx + 1).padStart(2,"0")}
+                            </span>
+                            <TA editMode={editMode} value={item.text}
+                              onChange={e => secUpd("comingMonthItems",idx,"text",e.target.value)}
+                              placeholder="Key priority or action for next month…" rows={1}
+                              className="flex-1 text-base font-medium text-gray-800"/>
+                            {editMode && (
+                              <button onClick={() => secDel("comingMonthItems",idx)}
+                                className="text-gray-300 hover:text-red-400 transition-colors flex-shrink-0">
+                                <X size={14}/>
+                              </button>
+                            )}
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
+                    {prov.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            </DragDropContext>
+          </Card>
+        </SectionWrap>
+
+        {/* ── 07 RISKS & CONSTRAINTS ───────────────────────────────────────── */}
+        <SectionWrap number={7} title="Risks & Constraints" icon={AlertTriangle}
           onAdd={editMode ? () => secAdd("risks", makeRisk) : null}
           addLabel="Add risk">
           <Card>
@@ -777,7 +904,7 @@ export default function Dashboard() {
                       <Draggable key={item.id} draggableId={item.id} index={idx}>
                         {(prov2, snap2) => (
                           <div ref={prov2.innerRef} {...prov2.draggableProps}
-                            className={cn("item-row flex items-start gap-3 px-5 py-3.5 group hover:bg-gray-50 transition-colors",
+                            className={cn("item-row flex items-start gap-3 px-5 py-3.5 group hover:bg-gray-50/60 transition-colors",
                               snap2.isDragging && "bg-white shadow-md rounded-2xl")}>
                             <DragHandle {...prov2.dragHandleProps} />
                             <div className="flex-1 min-w-0 grid gap-3 items-start"
@@ -796,7 +923,7 @@ export default function Dashboard() {
                                   placeholder="Owner…" rows={1} className="flex-1 text-gray-500"/>
                                 {editMode && (
                                   <button onClick={() => secDel("risks",idx)}
-                                    className="text-gray-300 hover:text-red-400 transition-colors pt-2.5 flex-shrink-0">
+                                    className="text-gray-300 hover:text-red-400 transition-colors pt-2 flex-shrink-0">
                                     <X size={14}/>
                                   </button>
                                 )}
@@ -814,29 +941,69 @@ export default function Dashboard() {
           </Card>
         </SectionWrap>
 
-        {/* ── CUSTOM MODULES ──────────────────────────────────────────────── */}
-        {(data.customModules.length > 0 || editMode) && (
-          <SectionWrap title="Additional Modules" icon={Folder}
-            onAdd={editMode ? () => setData(d => ({...d,customModules:[...d.customModules, makeCustomModule()]})) : null}
-            addLabel="Add module">
-            <div className="space-y-4">
-              {data.customModules.map((mod,i) => (
-                <CustomModBlock key={mod.id} mod={mod} editMode={editMode}
-                  onUpdate={(k,v) => modUpd(i,k,v)}
-                  onDelete={() => modDel(i)}
-                  onAddItem={() => modItemAdd(i)}
-                  onDeleteItem={j => modItemDel(i,j)}
-                  onUpdateItem={(j,k,v) => modItemUpd(i,j,k,v)}
-                  onReorderItems={next => modItemReorder(i,next)} />
-              ))}
-              {data.customModules.length === 0 && editMode && (
-                <div className="text-center py-10 text-base text-gray-400 border-2 border-dashed border-gray-200 rounded-2xl">
-                  Click Add module above to add a custom section (SR&amp;ED, grants, research…)
+        {/* ── 08 PARTNERS (always last) ────────────────────────────────────── */}
+        <SectionWrap number={8} title="Partners" icon={Users}
+          onAdd={editMode ? () => secAdd("partners", makePartner) : null}
+          addLabel="Add partner">
+          <Card>
+            {data.partners.length > 0 && (
+              <div className="flex items-center gap-3 px-5 pt-4 pb-2 border-b border-gray-100">
+                <span className="w-4 flex-shrink-0"/>
+                <div className="flex-1 grid gap-4" style={{gridTemplateColumns:"140px auto 1fr"}}>
+                  <span className="text-xs font-bold uppercase tracking-widest text-gray-300">Partner</span>
+                  <span className="text-xs font-bold uppercase tracking-widest text-gray-300">Engagement</span>
+                  <span className="text-xs font-bold uppercase tracking-widest text-gray-300">Collaboration</span>
                 </div>
-              )}
-            </div>
-          </SectionWrap>
-        )}
+              </div>
+            )}
+            <DragDropContext onDragEnd={r => { if (r.destination) secReorder("partners", reorder(data.partners, r.source.index, r.destination.index)); }}>
+              <Droppable droppableId="partners">
+                {(prov, snap) => (
+                  <div ref={prov.innerRef} {...prov.droppableProps}
+                    className={cn("divide-y divide-gray-50", snap.isDraggingOver && "bg-brand-50/20")}>
+                    {data.partners.length === 0 && (
+                      <div className="px-5 py-10 text-base text-gray-400 text-center">
+                        {editMode ? "No partners yet — click Add partner to create one." : "No partners listed."}
+                      </div>
+                    )}
+                    {data.partners.map((item, idx) => (
+                      <Draggable key={item.id} draggableId={item.id} index={idx}>
+                        {(prov2, snap2) => (
+                          <div ref={prov2.innerRef} {...prov2.draggableProps}
+                            className={cn("item-row flex items-start gap-3 px-5 py-3.5 group hover:bg-gray-50/60 transition-colors",
+                              snap2.isDragging && "bg-white shadow-md rounded-2xl")}>
+                            <DragHandle {...prov2.dragHandleProps}/>
+                            <div className="flex-1 min-w-0 grid gap-4 items-start" style={{gridTemplateColumns:"140px auto 1fr"}}>
+                              <TA editMode={editMode} value={item.name}
+                                onChange={e => secUpd("partners",idx,"name",e.target.value)}
+                                placeholder="Partner name…" rows={1}
+                                className="font-semibold text-gray-800 text-sm"/>
+                              <SS value={item.engagement} onChange={v => secUpd("partners",idx,"engagement",v)}
+                                options={cfgOpts(PARTNER_ENGAGEMENT_CONFIG)} cfg={PARTNER_ENGAGEMENT_CONFIG} editMode={editMode}/>
+                              <div className="flex gap-2 items-start">
+                                <TA editMode={editMode} value={item.description}
+                                  onChange={e => secUpd("partners",idx,"description",e.target.value)}
+                                  placeholder="Describe the collaboration and its current status…" rows={1}
+                                  className="flex-1 text-sm text-gray-500"/>
+                                {editMode && (
+                                  <button onClick={() => secDel("partners",idx)}
+                                    className="text-gray-300 hover:text-red-400 transition-colors pt-2 flex-shrink-0">
+                                    <X size={14}/>
+                                  </button>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
+                    {prov.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            </DragDropContext>
+          </Card>
+        </SectionWrap>
 
         <p className="text-center text-sm text-gray-300 pb-6 no-print">
           WeTrials · {MONTHS[month]} {year} · {editMode ? "Edit mode — click Save when done" : "Click Edit to make changes"}
