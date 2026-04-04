@@ -254,14 +254,14 @@ function InsightRow({ item, editMode, onUpdate, onDelete, provided, snapshot }) 
           className="text-sm text-gray-500" />
       </div>
 
-      {/* Right: Impact + Direction */}
-      <div className="flex flex-col items-end gap-2.5 flex-shrink-0">
-        <div className="flex flex-col items-end gap-1">
+      {/* Right: Impact + Direction — inline label next to control */}
+      <div className="flex flex-col items-end gap-2 flex-shrink-0">
+        <div className="flex items-center gap-1.5">
           <FieldLabel title="Level of business importance: High / Medium / Low">Impact</FieldLabel>
           <SS value={item.impact} onChange={v => onUpdate("impact",v)}
             options={cfgOpts(IMPACT_CONFIG)} cfg={IMPACT_CONFIG} editMode={editMode} />
         </div>
-        <div className="flex flex-col items-end gap-1">
+        <div className="flex items-center gap-1.5">
           <FieldLabel title="Trend direction: Positive (↑) / Neutral (→) / Negative (↓)">Direction</FieldLabel>
           <DirToggle value={item.direction} onChange={v => onUpdate("direction",v)} editMode={editMode} />
         </div>
@@ -356,31 +356,29 @@ function KPICard({ k, idx, editMode, onChange, onDelete }) {
           )}
         </div>
 
-        {/* ── Value area — current value truly centred, prev floats left ── */}
-        <div className="relative flex items-center justify-center mb-4" style={{ minHeight: "5.5rem" }}>
+        {/* ── Value area — whole group centred, prev+arrow tight left of current ── */}
+        <div className="flex flex-col items-center justify-center mb-4" style={{ minHeight: "5.5rem" }}>
           {hasPrev ? (
-            <>
-              {/* Prev label + value + arrow — anchored to left */}
-              <div className="absolute left-0 flex items-end gap-1">
-                <div className="flex flex-col items-end">
-                  <input readOnly={!editMode} value={k.prevLabel ?? "Prev"}
-                    onChange={e => upd("prevLabel", e.target.value)}
-                    className="text-xs text-gray-400 font-medium bg-transparent border-0 p-0 focus:outline-none text-right"
-                    style={{ width: "2.8rem" }} />
-                  <input readOnly={!editMode} value={k.prevValue}
-                    onChange={e => upd("prevValue", e.target.value)} placeholder="—"
-                    style={{ color: "#9ca3af" }}
-                    className={cn("text-xl font-semibold text-right focus:outline-none bg-transparent border-0 p-0",
-                      editMode && "border border-gray-200 rounded-lg px-2 py-1 bg-gray-50 focus:border-brand-500 w-20")} />
-                </div>
-                <span className="text-gray-300 text-base" style={{ lineHeight: "1.75rem" }}>→</span>
+            <div className="flex items-end justify-center gap-1.5">
+              {/* Prev: label above value, right-aligned, bottom-aligned with arrow */}
+              <div className="flex flex-col items-end pb-1">
+                <input readOnly={!editMode} value={k.prevLabel ?? "Prev"}
+                  onChange={e => upd("prevLabel", e.target.value)}
+                  className="text-xs text-gray-400 font-medium bg-transparent border-0 p-0 focus:outline-none text-right mb-0.5"
+                  style={{ width: "2.8rem" }} />
+                <input readOnly={!editMode} value={k.prevValue}
+                  onChange={e => upd("prevValue", e.target.value)} placeholder="—"
+                  style={{ color: "#9ca3af" }}
+                  className={cn("text-xl font-semibold text-right focus:outline-none bg-transparent border-0 p-0",
+                    editMode && "border border-gray-200 rounded-lg px-2 py-1 bg-gray-50 focus:border-brand-500 w-20")} />
               </div>
-              {/* Current value — always centred */}
+              <span className="text-gray-300 text-base flex-shrink-0 pb-1.5">→</span>
+              {/* Current value — dominant focal point */}
               <input readOnly={!editMode} value={k.value}
                 onChange={e => upd("value", e.target.value)} placeholder="—"
                 className={cn(numInput("text-5xl text-center"),
                   editMode && "border border-gray-200 rounded-xl px-3 py-2 focus:border-brand-500 w-28")} />
-            </>
+            </div>
           ) : (
             /* No prev — single big centred value */
             <>
@@ -391,7 +389,7 @@ function KPICard({ k, idx, editMode, onChange, onDelete }) {
               {editMode && (
                 <input value={k.prevValue} onChange={e => upd("prevValue", e.target.value)}
                   placeholder="+ add previous value"
-                  className="absolute bottom-0 w-full text-xs text-center text-gray-300 border border-dashed border-gray-200 rounded-lg px-2 py-1 bg-transparent focus:outline-none focus:border-brand-400 placeholder:text-gray-300" />
+                  className="mt-2 w-full text-xs text-center text-gray-300 border border-dashed border-gray-200 rounded-lg px-2 py-1 bg-transparent focus:outline-none focus:border-brand-400 placeholder:text-gray-300" />
               )}
             </>
           )}
@@ -615,6 +613,17 @@ export default function Dashboard() {
     setTimeout(() => setSaveFlash(false), 1800);
   }
 
+  // Navigate to (today − 1 month) — the natural "report month"
+  function handleNewReport() {
+    const now  = new Date();
+    let   m    = now.getMonth() - 1;
+    let   y    = now.getFullYear();
+    if (m < 0) { m = 11; y -= 1; }
+    setMonth(m);
+    setYear(y);
+    setEditMode(false);
+  }
+
   // Section helpers
   function secAdd(f, mk)         { setData(d => ({...d,[f]:[mk(),...d[f]]})); }
   function secDel(f, i)          { setData(d => ({...d,[f]:d[f].filter((_,x)=>x!==i)})); }
@@ -656,6 +665,10 @@ export default function Dashboard() {
 
           {/* Actions */}
           <div className="flex items-center gap-2.5 no-print">
+            <button onClick={handleNewReport}
+              className="inline-flex items-center gap-2 text-sm font-semibold rounded-xl px-4 py-2.5 border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 transition-colors">
+              <Plus size={14}/> New Report
+            </button>
             <button onClick={save}
               className={cn("inline-flex items-center gap-2 text-sm font-semibold rounded-xl px-5 py-2.5 transition-colors",
                 saveFlash ? "bg-emerald-600 text-white" : "bg-gray-900 hover:bg-gray-800 text-white")}>
@@ -729,40 +742,45 @@ export default function Dashboard() {
                       <Draggable key={item.id} draggableId={item.id} index={idx}>
                         {(prov2, snap2) => (
                           <div ref={prov2.innerRef} {...prov2.draggableProps}
-                            className={cn("item-row flex items-start gap-3 px-5 py-5 group hover:bg-gray-50/60 transition-colors",
+                            className={cn("item-row flex items-start gap-3 px-5 py-4 group hover:bg-gray-50/60 transition-colors",
                               snap2.isDragging && "bg-white shadow-lg rounded-2xl")}>
                             <DragHandle {...prov2.dragHandleProps} />
-                            {/* Left: title + notes */}
-                            <div className="flex-1 min-w-0 space-y-1">
-                              <FieldLabel title="Name of the initiative or feature being delivered">Initiative / Feature</FieldLabel>
-                              <TA editMode={editMode} value={item.title}
-                                onChange={e => secUpd("delivery",idx,"title",e.target.value)}
-                                placeholder="Initiative or feature name…" rows={1}
-                                className="text-base font-semibold text-gray-900"/>
-                              <FieldLabel title="What is happening and why it matters">Notes</FieldLabel>
-                              <TA editMode={editMode} value={item.notes}
-                                onChange={e => secUpd("delivery",idx,"notes",e.target.value)}
-                                placeholder="What is happening and why it matters…" rows={2}
-                                className="text-sm text-gray-500"/>
-                            </div>
-                            {/* Right: Priority + Progress — stacked with labels above badge */}
-                            <div className="flex flex-col items-end gap-2.5 flex-shrink-0">
-                              <div className="flex flex-col items-end gap-1">
-                                <FieldLabel title="Importance level: Highest / High / Medium / Low">Priority</FieldLabel>
-                                <SS value={item.priority} onChange={v => secUpd("delivery",idx,"priority",v)}
-                                  options={cfgOpts(PRIORITY_CONFIG)} cfg={PRIORITY_CONFIG} editMode={editMode}/>
+                            <div className="flex-1 min-w-0">
+                              {/* Row 1: label strip */}
+                              <div className="flex items-center justify-between mb-0.5">
+                                <FieldLabel title="Name of the initiative or feature being delivered">Initiative / Feature</FieldLabel>
+                                <div className="flex items-center gap-4">
+                                  <FieldLabel title="Importance level: Highest / High / Medium / Low">Priority</FieldLabel>
+                                  <FieldLabel title="Current delivery status">Progress</FieldLabel>
+                                </div>
                               </div>
-                              <div className="flex flex-col items-end gap-1">
-                                <FieldLabel title="Current delivery status">Progress</FieldLabel>
-                                <SS value={item.status} onChange={v => secUpd("delivery",idx,"status",v)}
-                                  options={cfgOpts(STATUS_CONFIG)} cfg={STATUS_CONFIG} editMode={editMode}/>
+                              {/* Row 2: title + badges on same line */}
+                              <div className="flex items-start gap-3">
+                                <TA editMode={editMode} value={item.title}
+                                  onChange={e => secUpd("delivery",idx,"title",e.target.value)}
+                                  placeholder="Initiative or feature name…" rows={1}
+                                  className="flex-1 text-base font-semibold text-gray-900"/>
+                                <div className="flex items-center gap-2 flex-shrink-0">
+                                  <SS value={item.priority} onChange={v => secUpd("delivery",idx,"priority",v)}
+                                    options={cfgOpts(PRIORITY_CONFIG)} cfg={PRIORITY_CONFIG} editMode={editMode}/>
+                                  <SS value={item.status} onChange={v => secUpd("delivery",idx,"status",v)}
+                                    options={cfgOpts(STATUS_CONFIG)} cfg={STATUS_CONFIG} editMode={editMode}/>
+                                  {editMode && (
+                                    <button onClick={() => secDel("delivery",idx)}
+                                      className="text-gray-300 hover:text-red-400 transition-colors flex-shrink-0">
+                                      <X size={14}/>
+                                    </button>
+                                  )}
+                                </div>
                               </div>
-                              {editMode && (
-                                <button onClick={() => secDel("delivery",idx)}
-                                  className="text-gray-300 hover:text-red-400 transition-colors p-1">
-                                  <X size={14}/>
-                                </button>
-                              )}
+                              {/* Row 3: notes full width */}
+                              <div className="mt-2.5">
+                                <FieldLabel title="What is happening and why it matters">Notes</FieldLabel>
+                                <TA editMode={editMode} value={item.notes}
+                                  onChange={e => secUpd("delivery",idx,"notes",e.target.value)}
+                                  placeholder="What is happening and why it matters…" rows={2}
+                                  className="text-sm text-gray-500 w-full"/>
+                              </div>
                             </div>
                           </div>
                         )}
@@ -776,22 +794,11 @@ export default function Dashboard() {
           </Card>
         </SectionWrap>
 
-        {/* ── 05 PARTNER MILESTONES ────────────────────────────────────────── */}
+        {/* ── 05 PARTNER MILESTONES — same card/list style as Delivery ──────── */}
         <SectionWrap number={5} title="Partner Milestones" icon={Handshake}
           onAdd={editMode ? () => secAdd("partnerMilestones", makePartnerMilestone) : null}
           addLabel="Add milestone">
           <Card>
-            {data.partnerMilestones.length > 0 && (
-              <div className="flex items-center gap-3 px-5 pt-4 pb-2 border-b border-gray-100">
-                <span className="w-4 flex-shrink-0"/>
-                <div className="flex-1 grid gap-4" style={{gridTemplateColumns:"120px 1fr auto auto"}}>
-                  <span className="text-xs font-bold uppercase tracking-widest text-gray-300">Partner</span>
-                  <span className="text-xs font-bold uppercase tracking-widest text-gray-300">Milestone / Achievement</span>
-                  <span className="text-xs font-bold uppercase tracking-widest text-gray-300">Status</span>
-                  <span className="text-xs font-bold uppercase tracking-widest text-gray-300 w-32">Note</span>
-                </div>
-              </div>
-            )}
             <DragDropContext onDragEnd={r => { if (r.destination) secReorder("partnerMilestones", reorder(data.partnerMilestones, r.source.index, r.destination.index)); }}>
               <Droppable droppableId="partner-milestones">
                 {(prov, snap) => (
@@ -806,32 +813,59 @@ export default function Dashboard() {
                       <Draggable key={item.id} draggableId={item.id} index={idx}>
                         {(prov2, snap2) => (
                           <div ref={prov2.innerRef} {...prov2.draggableProps}
-                            className={cn("item-row flex items-start gap-3 px-5 py-3.5 group hover:bg-gray-50/60 transition-colors",
+                            className={cn("item-row flex items-start gap-3 px-5 py-4 group hover:bg-gray-50/60 transition-colors",
                               snap2.isDragging && "bg-white shadow-md rounded-2xl")}>
                             <DragHandle {...prov2.dragHandleProps}/>
-                            <div className="flex-1 min-w-0 grid gap-4 items-start" style={{gridTemplateColumns:"120px 1fr auto 128px"}}>
-                              <TA editMode={editMode} value={item.partner}
-                                onChange={e => secUpd("partnerMilestones",idx,"partner",e.target.value)}
-                                placeholder="Partner name…" rows={1}
-                                className="font-semibold text-gray-800 text-sm"/>
-                              <TA editMode={editMode} value={item.milestone}
-                                onChange={e => secUpd("partnerMilestones",idx,"milestone",e.target.value)}
-                                placeholder="Milestone or achievement…" rows={1}
-                                className="text-sm text-gray-700"/>
-                              <SS value={item.status} onChange={v => secUpd("partnerMilestones",idx,"status",v)}
-                                options={cfgOpts(MILESTONE_STATUS_CONFIG)} cfg={MILESTONE_STATUS_CONFIG} editMode={editMode}/>
-                              <div className="flex gap-2 items-start">
-                                <TA editMode={editMode} value={item.note}
-                                  onChange={e => secUpd("partnerMilestones",idx,"note",e.target.value)}
-                                  placeholder="Short note…" rows={1}
-                                  className="flex-1 text-sm text-gray-500"/>
-                                {editMode && (
-                                  <button onClick={() => secDel("partnerMilestones",idx)}
-                                    className="text-gray-300 hover:text-red-400 transition-colors pt-2 flex-shrink-0">
-                                    <X size={14}/>
-                                  </button>
-                                )}
+                            <div className="flex-1 min-w-0">
+                              {/* Row 1: label strip */}
+                              <div className="flex items-center justify-between mb-0.5">
+                                <div className="flex items-center gap-3">
+                                  <FieldLabel title="Name of the partner organisation">Partner</FieldLabel>
+                                  <span className="text-gray-200 text-xs">·</span>
+                                  <FieldLabel title="What was achieved or delivered">Milestone / Achievement</FieldLabel>
+                                </div>
+                                <div className="flex items-center gap-4">
+                                  <FieldLabel title="Milestone status">Status</FieldLabel>
+                                  <FieldLabel title="Importance level">Priority</FieldLabel>
+                                </div>
                               </div>
+                              {/* Row 2: partner name + milestone text + status + priority badges */}
+                              <div className="flex items-start gap-3">
+                                <div className="flex-1 min-w-0 flex items-start gap-2">
+                                  <TA editMode={editMode} value={item.partner}
+                                    onChange={e => secUpd("partnerMilestones",idx,"partner",e.target.value)}
+                                    placeholder="Partner name…" rows={1}
+                                    className="text-base font-semibold text-gray-900 w-36 flex-shrink-0"/>
+                                  {(item.milestone || editMode) && (
+                                    <TA editMode={editMode} value={item.milestone}
+                                      onChange={e => secUpd("partnerMilestones",idx,"milestone",e.target.value)}
+                                      placeholder="Milestone or achievement…" rows={1}
+                                      className="flex-1 text-base text-gray-700"/>
+                                  )}
+                                </div>
+                                <div className="flex items-center gap-2 flex-shrink-0">
+                                  <SS value={item.status} onChange={v => secUpd("partnerMilestones",idx,"status",v)}
+                                    options={cfgOpts(MILESTONE_STATUS_CONFIG)} cfg={MILESTONE_STATUS_CONFIG} editMode={editMode}/>
+                                  <SS value={item.priority ?? "medium"} onChange={v => secUpd("partnerMilestones",idx,"priority",v)}
+                                    options={cfgOpts(PRIORITY_CONFIG)} cfg={PRIORITY_CONFIG} editMode={editMode}/>
+                                  {editMode && (
+                                    <button onClick={() => secDel("partnerMilestones",idx)}
+                                      className="text-gray-300 hover:text-red-400 transition-colors flex-shrink-0">
+                                      <X size={14}/>
+                                    </button>
+                                  )}
+                                </div>
+                              </div>
+                              {/* Row 3: note full width */}
+                              {(item.note || editMode) && (
+                                <div className="mt-2.5">
+                                  <FieldLabel title="Additional context or detail">Note</FieldLabel>
+                                  <TA editMode={editMode} value={item.note}
+                                    onChange={e => secUpd("partnerMilestones",idx,"note",e.target.value)}
+                                    placeholder="Additional context or detail…" rows={1}
+                                    className="text-sm text-gray-500 w-full"/>
+                                </div>
+                              )}
                             </div>
                           </div>
                         )}

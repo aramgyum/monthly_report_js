@@ -86,7 +86,7 @@ export const makeRisk              = () => ({ id: newId(), text: "", severity: "
 export const makeKPI               = () => ({ id: newId(), label: "New KPI", value: "", prevValue: "", prevLabel: "Prev", nowLabel: "Now", sub: "" });
 export const makeCustomModule      = () => ({ id: newId(), title: "New Module", description: "", items: [] });
 export const makeModuleItem        = () => ({ id: newId(), text: "", status: "in-progress" });
-export const makePartnerMilestone  = () => ({ id: newId(), partner: "", milestone: "", status: "in-progress", note: "" });
+export const makePartnerMilestone  = () => ({ id: newId(), partner: "", milestone: "", status: "in-progress", priority: "medium", note: "" });
 export const makeComingMonthItem   = () => ({ id: newId(), text: "" });
 export const makePartner           = () => ({ id: newId(), name: "", engagement: "active", description: "" });
 
