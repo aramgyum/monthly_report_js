@@ -360,52 +360,59 @@ function KPICard({ k, idx, editMode, onChange, onDelete }) {
           )}
         </div>
 
-        {/* ── Value area ─────────────────────────────────────────────────────
-             3-column trick: [flex-1 prev+arrow right-aligned] [current] [flex-1 spacer]
-             The two flex-1 columns are equal so the current value is DEAD CENTER.        ── */}
-        <div className="mb-4" style={{ minHeight: "5.5rem", display: "flex", alignItems: "flex-end" }}>
-          {/* Left column: prev label + value + arrow, pushed right */}
-          <div style={{ flex: 1, display: "flex", alignItems: "flex-end", justifyContent: "flex-end", gap: "4px", paddingRight: "6px", paddingBottom: "4px" }}>
-            {hasPrev && (
+        {/* ── Value area ──────────────────────────────────────────────────────
+             Read mode  : prev+arrow as small text, current as a <div> (no clipping)
+             Edit mode  : inputs with fixed widths
+             3-col flex : [flex-1 left][center][flex-1 right] keeps center DEAD CENTER ── */}
+        <div className="flex items-end mb-4" style={{ minHeight: "5.5rem" }}>
+
+          {/* Left: prev label + value + arrow — right-aligned in its flex-1 column */}
+          <div className="flex-1 flex items-end justify-end gap-1 pb-1 pr-1.5">
+            {hasPrev && !editMode && (
               <>
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
-                  <input readOnly={!editMode} value={k.prevLabel ?? "Prev"}
-                    onChange={e => upd("prevLabel", e.target.value)}
+                <div className="flex flex-col items-end">
+                  <span className="text-xs text-gray-400 font-medium mb-0.5">{k.prevLabel ?? "Prev"}</span>
+                  <span className="text-xl font-semibold" style={{ color: "#9ca3af" }}>{k.prevValue || "—"}</span>
+                </div>
+                <span className="text-gray-300 text-base" style={{ lineHeight: "1.75rem" }}>→</span>
+              </>
+            )}
+            {hasPrev && editMode && (
+              <>
+                <div className="flex flex-col items-end">
+                  <input value={k.prevLabel ?? "Prev"} onChange={e => upd("prevLabel", e.target.value)}
                     className="text-xs text-gray-400 font-medium bg-transparent border-0 p-0 focus:outline-none text-right mb-0.5"
                     style={{ width: "2.8rem" }} />
-                  <input readOnly={!editMode} value={k.prevValue}
-                    onChange={e => upd("prevValue", e.target.value)} placeholder="—"
-                    style={{ color: "#9ca3af" }}
-                    className={cn("text-xl font-semibold text-right focus:outline-none bg-transparent border-0 p-0",
-                      editMode && "border border-gray-200 rounded-lg px-2 py-1 bg-gray-50 focus:border-brand-500 w-20")} />
+                  <input value={k.prevValue} onChange={e => upd("prevValue", e.target.value)} placeholder="—"
+                    style={{ color: "#9ca3af", width: "4.5rem" }}
+                    className="text-xl font-semibold text-right focus:outline-none border border-gray-200 rounded-lg px-2 py-1 bg-gray-50 focus:border-brand-500" />
                 </div>
-                <span className="text-gray-300 text-base flex-shrink-0" style={{ lineHeight: "1.75rem" }}>→</span>
+                <span className="text-gray-300 text-base" style={{ lineHeight: "1.75rem" }}>→</span>
               </>
             )}
           </div>
 
-          {/* Center column: current value — this is what is centered */}
-          {hasPrev ? (
-            <input readOnly={!editMode} value={k.value}
-              onChange={e => upd("value", e.target.value)} placeholder="—"
-              className={cn(numInput("text-5xl text-center"), "flex-shrink-0",
-                editMode && "border border-gray-200 rounded-xl px-3 py-2 focus:border-brand-500 w-28")} />
-          ) : (
-            <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center" }}>
-              <input readOnly={!editMode} value={k.value}
-                onChange={e => upd("value", e.target.value)} placeholder="—"
-                className={cn("text-center", numInput("text-5xl"),
-                  editMode && "border border-gray-200 rounded-xl px-3 py-2 focus:border-brand-500 w-full")} />
-              {editMode && (
-                <input value={k.prevValue} onChange={e => upd("prevValue", e.target.value)}
-                  placeholder="+ add previous value"
-                  className="mt-2 w-full text-xs text-center text-gray-300 border border-dashed border-gray-200 rounded-lg px-2 py-1 bg-transparent focus:outline-none focus:border-brand-400 placeholder:text-gray-300" />
-              )}
-            </div>
-          )}
+          {/* Center: current value — flex-shrink-0 keeps it from growing/shrinking */}
+          <div className="flex-shrink-0 flex flex-col items-center">
+            {editMode ? (
+              <input value={k.value} onChange={e => upd("value", e.target.value)} placeholder="—"
+                className="text-5xl font-extrabold text-gray-900 text-center leading-none focus:outline-none border border-gray-200 rounded-xl px-3 py-2 bg-white focus:border-brand-500"
+                style={{ width: "7rem" }} />
+            ) : (
+              <div className="text-5xl font-extrabold text-gray-900 text-center leading-none">
+                {k.value || "—"}
+              </div>
+            )}
+            {!hasPrev && editMode && (
+              <input value={k.prevValue} onChange={e => upd("prevValue", e.target.value)}
+                placeholder="+ add prev value"
+                className="mt-2 text-xs text-center text-gray-300 border border-dashed border-gray-200 rounded-lg px-2 py-1 bg-transparent focus:outline-none focus:border-brand-400 placeholder:text-gray-300"
+                style={{ width: "10rem" }} />
+            )}
+          </div>
 
-          {/* Right column: spacer mirrors the left column width */}
-          {hasPrev && <div style={{ flex: 1 }} />}
+          {/* Right: mirror spacer so center stays centred */}
+          <div className="flex-1" />
         </div>
 
         {/* ── Footer: delta badge + subtitle ── */}
@@ -649,10 +656,11 @@ export default function Dashboard() {
         headers: { "Content-Type": "application/json" },
         body:    JSON.stringify(updated),
       });
-      if (!res.ok) throw new Error("save failed");
+      // 501 = GitHub env vars not set yet; localStorage backup already written above
+      if (!res.ok && res.status !== 501) throw new Error("save failed");
       setSaveState("saved");
     } catch {
-      // GitHub save failed but localStorage backup succeeded
+      // Network error — data still in localStorage
       setSaveState("error");
     }
     setTimeout(() => setSaveState("idle"), 2500);
