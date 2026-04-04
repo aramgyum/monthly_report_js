@@ -3,39 +3,55 @@ import { newId } from "./utils";
 export const PASSWORD     = "wtproduct2026";
 export const STORAGE_KEY  = "wetrials-monthly-v4";
 
+// ── Shared badge palette (single source of truth) ────────────────────────────
+const BADGE = {
+  high:        "bg-orange-50 text-orange-700 border-orange-200",
+  medium:      "bg-amber-50  text-amber-700  border-amber-200",
+  low:         "bg-blue-50   text-blue-600   border-blue-200",
+  done:        "bg-emerald-50 text-emerald-700 border-emerald-200",
+  inProgress:  "bg-blue-50   text-blue-700   border-blue-200",
+  pending:     "bg-amber-50  text-amber-700  border-amber-200",
+  planned:     "bg-gray-100  text-gray-500   border-gray-200",
+  offTrack:    "bg-red-50    text-red-700    border-red-200",
+  critical:    "bg-red-100   text-red-800    border-red-300",
+  neutral:     "bg-gray-100  text-gray-600   border-gray-200",
+  positive:    "bg-emerald-50 text-emerald-700 border-emerald-200",
+  negative:    "bg-red-50    text-red-700    border-red-200",
+};
+
 // ── Config maps ───────────────────────────────────────────────────────────────
 export const IMPACT_CONFIG = {
-  high:   { label: "High",   cls: "bg-red-50 text-red-700 border-red-200"        },
-  medium: { label: "Medium", cls: "bg-amber-50 text-amber-700 border-amber-200"  },
-  low:    { label: "Low",    cls: "bg-gray-100 text-gray-500 border-gray-200"    },
+  high:   { label: "High",   cls: BADGE.high    },
+  medium: { label: "Medium", cls: BADGE.medium  },
+  low:    { label: "Low",    cls: BADGE.low     },
 };
 
 export const DIRECTION_CONFIG = {
-  positive: { label: "↑ Positive", cls: "bg-emerald-50 text-emerald-700 border-emerald-200" },
-  neutral:  { label: "→ Neutral",  cls: "bg-gray-100 text-gray-600 border-gray-200"          },
-  negative: { label: "↓ Negative", cls: "bg-red-50 text-red-700 border-red-200"              },
+  positive: { label: "↑ Positive", cls: BADGE.positive },
+  neutral:  { label: "→ Neutral",  cls: BADGE.neutral  },
+  negative: { label: "↓ Negative", cls: BADGE.negative },
 };
 
 export const STATUS_CONFIG = {
-  done:          { label: "Done",        cls: "bg-emerald-50 text-emerald-700 border-emerald-200" },
-  "in-progress": { label: "In Progress", cls: "bg-blue-50 text-blue-700 border-blue-200"          },
-  pending:       { label: "Pending",     cls: "bg-amber-50 text-amber-700 border-amber-200"       },
-  "off-track":   { label: "Off Track",   cls: "bg-red-50 text-red-700 border-red-200"             },
-  planned:       { label: "Planned",     cls: "bg-gray-100 text-gray-500 border-gray-200"         },
+  done:          { label: "Done",        cls: BADGE.done       },
+  "in-progress": { label: "In Progress", cls: BADGE.inProgress },
+  pending:       { label: "Pending",     cls: BADGE.pending    },
+  "off-track":   { label: "Off Track",   cls: BADGE.offTrack   },
+  planned:       { label: "Planned",     cls: BADGE.planned    },
 };
 
 export const SEVERITY_CONFIG = {
-  low:      { label: "Low",      cls: "bg-blue-50 text-blue-600 border-blue-200"       },
-  medium:   { label: "Medium",   cls: "bg-amber-50 text-amber-700 border-amber-200"    },
-  high:     { label: "High",     cls: "bg-orange-50 text-orange-700 border-orange-200" },
-  critical: { label: "Critical", cls: "bg-red-100 text-red-800 border-red-300"         },
+  low:      { label: "Low",      cls: BADGE.low      },
+  medium:   { label: "Medium",   cls: BADGE.medium   },
+  high:     { label: "High",     cls: BADGE.high     },
+  critical: { label: "Critical", cls: BADGE.critical },
 };
 
 export const PRIORITY_CONFIG = {
-  highest: { label: "Highest", cls: "bg-red-50 text-red-700 border-red-200"          },
-  high:    { label: "High",    cls: "bg-orange-50 text-orange-700 border-orange-200" },
-  medium:  { label: "Medium",  cls: "bg-gray-100 text-gray-600 border-gray-200"      },
-  low:     { label: "Low",     cls: "bg-blue-50 text-blue-600 border-blue-200"       },
+  highest: { label: "Highest", cls: BADGE.critical },
+  high:    { label: "High",    cls: BADGE.high     },
+  medium:  { label: "Medium",  cls: BADGE.medium   },
+  low:     { label: "Low",     cls: BADGE.low      },
 };
 
 export const CATEGORY_CONFIG = {

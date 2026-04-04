@@ -19,14 +19,12 @@ import {
 } from "@/lib/data";
 
 // ─────────────────────────────────────────────────────────────────────────────
-// WETRIALS LOGO — uses logo.png if present, falls back to logo.svg
+// WETRIALS LOGO — PNG only
 // ─────────────────────────────────────────────────────────────────────────────
 function WeLogo({ size = 44 }) {
-  const [src, setSrc] = useState("/logo.png");
   return (
     <img
-      src={src}
-      onError={() => setSrc("/logo.svg")}
+      src="/logo.png"
       width={size}
       height={size}
       alt="WeTrials"
@@ -328,69 +326,66 @@ function KPICard({ k, idx, editMode, onChange, onDelete }) {
 
         {/* ── Value area ── */}
         {hasPrev ? (
-          /* Prev → Now layout */
-          <div className="flex items-end gap-3">
+          /* Prev → Now layout: prev small/muted, arrow, now BIG */
+          <div className="flex items-baseline gap-2">
             {/* Prev column */}
-            <div className="flex flex-col min-w-0">
-              {/* editable "Prev" label */}
+            <div className="flex flex-col flex-shrink-0">
               <input
                 readOnly={!editMode}
                 value={k.prevLabel ?? "Prev"}
                 onChange={e => upd("prevLabel", e.target.value)}
                 placeholder="Prev"
-                className="text-xs text-gray-300 font-medium bg-transparent border-0 p-0 focus:outline-none mb-1 w-16"
+                className="text-xs text-gray-300 font-medium bg-transparent border-0 p-0 focus:outline-none mb-0.5 w-14"
               />
               <input
                 readOnly={!editMode}
                 value={k.prevValue}
                 onChange={e => upd("prevValue", e.target.value)}
                 placeholder="—"
-                className={cn("text-xl font-semibold text-gray-350 focus:outline-none bg-transparent border-0 p-0",
-                  editMode && "border border-gray-200 rounded-lg px-2 py-1 bg-gray-50 focus:border-brand-500 w-24")}
+                className={cn("text-lg font-semibold focus:outline-none bg-transparent border-0 p-0",
+                  editMode && "border border-gray-200 rounded-lg px-2 py-1 bg-gray-50 focus:border-brand-500 w-20")}
                 style={{ color: "#9ca3af" }}
               />
             </div>
 
-            <span className="text-gray-200 text-xl pb-1 flex-shrink-0">→</span>
+            <span className="text-gray-300 text-base flex-shrink-0 mb-0.5">→</span>
 
-            {/* Now column */}
+            {/* Now column — dominant */}
             <div className="flex flex-col flex-1 min-w-0">
-              {/* editable "Now" label */}
               <input
                 readOnly={!editMode}
                 value={k.nowLabel ?? "Now"}
                 onChange={e => upd("nowLabel", e.target.value)}
                 placeholder="Now"
-                className="text-xs text-gray-400 font-medium bg-transparent border-0 p-0 focus:outline-none mb-1 w-16"
+                className="text-xs text-gray-400 font-medium bg-transparent border-0 p-0 focus:outline-none mb-0.5 w-14"
               />
               <input
                 readOnly={!editMode}
                 value={k.value}
                 onChange={e => upd("value", e.target.value)}
                 placeholder="—"
-                className={cn(numInput("text-4xl"),
+                className={cn(numInput("text-5xl"),
                   editMode && "border border-gray-200 rounded-lg px-2 py-1 focus:border-brand-500")}
               />
             </div>
           </div>
         ) : (
-          /* No prev — just big number, centered */
-          <div className="flex flex-col items-center justify-center py-2 gap-1">
+          /* No prev — single big value, centered */
+          <div className="flex flex-col items-center justify-center py-3 gap-2">
             <input
               readOnly={!editMode}
               value={k.value}
               onChange={e => upd("value", e.target.value)}
               placeholder="—"
-              className={cn("text-center", numInput("text-5xl"),
+              className={cn("text-center", numInput("text-6xl"),
                 editMode && "border border-gray-200 rounded-xl px-3 py-2 focus:border-brand-500 w-full")}
             />
-            {/* In edit mode show a subtle "add prev" field */}
             {editMode && (
               <input
                 value={k.prevValue}
                 onChange={e => upd("prevValue", e.target.value)}
                 placeholder="+ add previous value"
-                className="mt-2 w-full text-xs text-center text-gray-300 border border-dashed border-gray-200 rounded-lg px-2 py-1 bg-transparent focus:outline-none focus:border-brand-400 placeholder:text-gray-300"
+                className="w-full text-xs text-center text-gray-300 border border-dashed border-gray-200 rounded-lg px-2 py-1 bg-transparent focus:outline-none focus:border-brand-400 placeholder:text-gray-300"
               />
             )}
           </div>
@@ -625,13 +620,10 @@ export default function Dashboard() {
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center gap-5 flex-wrap">
 
           {/* Logo + brand */}
-          <div className="flex items-center gap-3.5 flex-1 min-w-0">
-            <WeLogo size={48} />
-            <div>
-              <div className="text-xl font-bold text-gray-900 leading-tight">WeTrials</div>
-              <div className="text-sm font-medium text-gray-400 leading-tight">Monthly Report</div>
-            </div>
-            <span className="text-gray-200 text-xl mx-1">|</span>
+          <div className="flex items-center gap-4 flex-1 min-w-0">
+            <WeLogo size={44} />
+            <span className="text-xl font-bold text-gray-900 whitespace-nowrap">WeTrials Monthly Report</span>
+            <span className="text-gray-200 text-xl">|</span>
             <select value={month} onChange={e => setMonth(+e.target.value)}
               className="text-xl font-bold text-gray-700 border-0 bg-transparent focus:outline-none cursor-pointer">
               {MONTHS.map((m,i) => <option key={m} value={i}>{m}</option>)}
@@ -702,51 +694,143 @@ export default function Dashboard() {
         <SectionWrap number={4} title="Product & Delivery" icon={Zap}
           onAdd={editMode ? () => secAdd("delivery", makeDelivery) : null}
           addLabel="Add item">
-          <DragTable id="delivery" items={data.delivery} editMode={editMode}
-            onReorder={n => secReorder("delivery",n)}
-            renderRow={(item, idx) => (
-              <div className="flex-1 grid gap-3 items-start" style={{gridTemplateColumns:"1fr 140px 120px 180px"}}>
-                <TA editMode={editMode} value={item.title}
-                  onChange={e => secUpd("delivery",idx,"title",e.target.value)}
-                  placeholder="Initiative or feature name…" rows={1}/>
-                <SS value={item.status} onChange={v => secUpd("delivery",idx,"status",v)}
-                  options={cfgOpts(STATUS_CONFIG)} cfg={STATUS_CONFIG} editMode={editMode}/>
-                <SS value={item.priority} onChange={v => secUpd("delivery",idx,"priority",v)}
-                  options={cfgOpts(PRIORITY_CONFIG)} cfg={PRIORITY_CONFIG} editMode={editMode}/>
-                <div className="flex items-start gap-2">
-                  <TA editMode={editMode} value={item.notes}
-                    onChange={e => secUpd("delivery",idx,"notes",e.target.value)}
-                    placeholder="Notes…" rows={1} className="flex-1 text-gray-500"/>
-                  {editMode && <button onClick={() => secDel("delivery",idx)} className="text-gray-300 hover:text-red-400 transition-colors pt-2.5 flex-shrink-0"><X size={14}/></button>}
+          <Card>
+            {/* Column labels header */}
+            {data.delivery.length > 0 && (
+              <div className="grid px-5 pt-4 pb-2 gap-4 border-b border-gray-100"
+                style={{gridTemplateColumns:"auto 1fr"}}>
+                <span className="w-5"/>
+                <div className="grid gap-4" style={{gridTemplateColumns:"1fr auto"}}>
+                  <span className="text-xs font-bold uppercase tracking-wider text-gray-400">Initiative / Feature</span>
+                  <span className="text-xs font-bold uppercase tracking-wider text-gray-400">Notes</span>
                 </div>
               </div>
-            )} />
+            )}
+            <DragDropContext onDragEnd={r => { if (r.destination) secReorder("delivery", reorder(data.delivery, r.source.index, r.destination.index)); }}>
+              <Droppable droppableId="delivery">
+                {(prov, snap) => (
+                  <div ref={prov.innerRef} {...prov.droppableProps}
+                    className={cn("divide-y divide-gray-50", snap.isDraggingOver && "bg-brand-50/20")}>
+                    {data.delivery.length === 0 && (
+                      <div className="px-5 py-10 text-base text-gray-400 text-center">
+                        {editMode ? "No items yet — click Add item to create one." : "No items."}
+                      </div>
+                    )}
+                    {data.delivery.map((item, idx) => (
+                      <Draggable key={item.id} draggableId={item.id} index={idx}>
+                        {(prov2, snap2) => (
+                          <div ref={prov2.innerRef} {...prov2.draggableProps}
+                            className={cn("item-row flex items-start gap-3 px-5 py-4 group hover:bg-gray-50 transition-colors",
+                              snap2.isDragging && "bg-white shadow-md rounded-2xl")}>
+                            <DragHandle {...prov2.dragHandleProps} />
+                            {/* Card body: title → badge row → notes */}
+                            <div className="flex-1 min-w-0 grid gap-4" style={{gridTemplateColumns:"1fr 1fr"}}>
+                              {/* Left: title + badge row */}
+                              <div className="flex flex-col gap-2 min-w-0">
+                                <TA editMode={editMode} value={item.title}
+                                  onChange={e => secUpd("delivery",idx,"title",e.target.value)}
+                                  placeholder="Initiative or feature name…" rows={1}
+                                  className="font-medium text-gray-900"/>
+                                {/* Compact badge row: Status · Priority */}
+                                <div className="flex items-center gap-2 flex-wrap">
+                                  <SS value={item.status} onChange={v => secUpd("delivery",idx,"status",v)}
+                                    options={cfgOpts(STATUS_CONFIG)} cfg={STATUS_CONFIG} editMode={editMode}/>
+                                  <SS value={item.priority} onChange={v => secUpd("delivery",idx,"priority",v)}
+                                    options={cfgOpts(PRIORITY_CONFIG)} cfg={PRIORITY_CONFIG} editMode={editMode}/>
+                                </div>
+                              </div>
+                              {/* Right: notes (full wrap) */}
+                              <div className="flex items-start gap-2 min-w-0">
+                                <TA editMode={editMode} value={item.notes}
+                                  onChange={e => secUpd("delivery",idx,"notes",e.target.value)}
+                                  placeholder="Notes…" rows={2}
+                                  className="flex-1 text-gray-500 whitespace-normal break-words min-w-0"/>
+                                {editMode && (
+                                  <button onClick={() => secDel("delivery",idx)}
+                                    className="text-gray-300 hover:text-red-400 transition-colors pt-2.5 flex-shrink-0">
+                                    <X size={14}/>
+                                  </button>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
+                    {prov.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            </DragDropContext>
+          </Card>
         </SectionWrap>
 
         {/* ── 05 RISKS & CONSTRAINTS ──────────────────────────────────────── */}
         <SectionWrap number={5} title="Risks & Constraints" icon={AlertTriangle}
           onAdd={editMode ? () => secAdd("risks", makeRisk) : null}
           addLabel="Add risk">
-          <DragTable id="risks" items={data.risks} editMode={editMode}
-            onReorder={n => secReorder("risks",n)}
-            renderRow={(item, idx) => (
-              <div className="flex-1 grid gap-3 items-start" style={{gridTemplateColumns:"1fr 120px 180px 140px"}}>
-                <TA editMode={editMode} value={item.text}
-                  onChange={e => secUpd("risks",idx,"text",e.target.value)}
-                  placeholder="Risk or constraint…" rows={1}/>
-                <SS value={item.severity} onChange={v => secUpd("risks",idx,"severity",v)}
-                  options={cfgOpts(SEVERITY_CONFIG)} cfg={SEVERITY_CONFIG} editMode={editMode}/>
-                <TA editMode={editMode} value={item.mitigation}
-                  onChange={e => secUpd("risks",idx,"mitigation",e.target.value)}
-                  placeholder="Mitigation…" rows={1} className="text-gray-500"/>
-                <div className="flex items-start gap-2">
-                  <TI editMode={editMode} value={item.owner}
-                    onChange={e => secUpd("risks",idx,"owner",e.target.value)}
-                    placeholder="Owner…" className="flex-1 text-gray-500"/>
-                  {editMode && <button onClick={() => secDel("risks",idx)} className="text-gray-300 hover:text-red-400 transition-colors pt-2.5 flex-shrink-0"><X size={14}/></button>}
+          <Card>
+            {data.risks.length > 0 && (
+              <div className="grid px-5 pt-4 pb-2 gap-4 border-b border-gray-100"
+                style={{gridTemplateColumns:"auto 1fr"}}>
+                <span className="w-5"/>
+                <div className="grid gap-3" style={{gridTemplateColumns:"1fr 110px 1fr 120px"}}>
+                  <span className="text-xs font-bold uppercase tracking-wider text-gray-400">Risk / Constraint</span>
+                  <span className="text-xs font-bold uppercase tracking-wider text-gray-400">Severity</span>
+                  <span className="text-xs font-bold uppercase tracking-wider text-gray-400">Mitigation</span>
+                  <span className="text-xs font-bold uppercase tracking-wider text-gray-400">Owner</span>
                 </div>
               </div>
-            )} />
+            )}
+            <DragDropContext onDragEnd={r => { if (r.destination) secReorder("risks", reorder(data.risks, r.source.index, r.destination.index)); }}>
+              <Droppable droppableId="risks">
+                {(prov, snap) => (
+                  <div ref={prov.innerRef} {...prov.droppableProps}
+                    className={cn("divide-y divide-gray-50", snap.isDraggingOver && "bg-brand-50/20")}>
+                    {data.risks.length === 0 && (
+                      <div className="px-5 py-10 text-base text-gray-400 text-center">
+                        {editMode ? "No items yet — click Add risk to create one." : "No items."}
+                      </div>
+                    )}
+                    {data.risks.map((item, idx) => (
+                      <Draggable key={item.id} draggableId={item.id} index={idx}>
+                        {(prov2, snap2) => (
+                          <div ref={prov2.innerRef} {...prov2.draggableProps}
+                            className={cn("item-row flex items-start gap-3 px-5 py-3.5 group hover:bg-gray-50 transition-colors",
+                              snap2.isDragging && "bg-white shadow-md rounded-2xl")}>
+                            <DragHandle {...prov2.dragHandleProps} />
+                            <div className="flex-1 min-w-0 grid gap-3 items-start"
+                              style={{gridTemplateColumns:"1fr 110px 1fr 120px"}}>
+                              <TA editMode={editMode} value={item.text}
+                                onChange={e => secUpd("risks",idx,"text",e.target.value)}
+                                placeholder="Risk or constraint…" rows={1}/>
+                              <SS value={item.severity} onChange={v => secUpd("risks",idx,"severity",v)}
+                                options={cfgOpts(SEVERITY_CONFIG)} cfg={SEVERITY_CONFIG} editMode={editMode}/>
+                              <TA editMode={editMode} value={item.mitigation}
+                                onChange={e => secUpd("risks",idx,"mitigation",e.target.value)}
+                                placeholder="Mitigation…" rows={1} className="text-gray-500"/>
+                              <div className="flex items-start gap-2">
+                                <TA editMode={editMode} value={item.owner}
+                                  onChange={e => secUpd("risks",idx,"owner",e.target.value)}
+                                  placeholder="Owner…" rows={1} className="flex-1 text-gray-500"/>
+                                {editMode && (
+                                  <button onClick={() => secDel("risks",idx)}
+                                    className="text-gray-300 hover:text-red-400 transition-colors pt-2.5 flex-shrink-0">
+                                    <X size={14}/>
+                                  </button>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
+                    {prov.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            </DragDropContext>
+          </Card>
         </SectionWrap>
 
         {/* ── CUSTOM MODULES ──────────────────────────────────────────────── */}
