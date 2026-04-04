@@ -47,8 +47,27 @@ body {
 .row-del { opacity: 0; transition: opacity 0.1s; }
 .item-row:hover .row-del { opacity: 1; }
 
-/* Textarea resize */
-textarea { resize: vertical; min-height: 2.25rem; }
+/* Textarea resize and wrapping */
+textarea {
+  resize: vertical;
+  min-height: 2.25rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* Consistent text wrapping everywhere */
+input, textarea, div {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* Read-mode textareas: show full content, no scroll, no clip */
+.read-mode textarea {
+  overflow: hidden;
+  height: auto;
+  white-space: pre-wrap;
+}
 
 @media print {
   .no-print { display: none !important; }

@@ -54,7 +54,7 @@ export const makeExecItem     = () => ({ id: newId(), title: "", summary: "", im
 export const makeInsightItem  = () => ({ id: newId(), title: "", summary: "", impact: "medium", direction: "neutral" });
 export const makeDelivery     = () => ({ id: newId(), title: "", status: "in-progress", priority: "medium", category: "other", notes: "" });
 export const makeRisk         = () => ({ id: newId(), text: "", severity: "medium", mitigation: "", owner: "" });
-export const makeKPI          = () => ({ id: newId(), label: "New KPI", value: "", prevValue: "", sub: "" });
+export const makeKPI          = () => ({ id: newId(), label: "New KPI", value: "", prevValue: "", prevLabel: "Prev", nowLabel: "Now", sub: "" });
 export const makeCustomModule = () => ({ id: newId(), title: "New Module", description: "", items: [] });
 export const makeModuleItem   = () => ({ id: newId(), text: "", status: "in-progress" });
 

@@ -19,11 +19,20 @@ import {
 } from "@/lib/data";
 
 // ─────────────────────────────────────────────────────────────────────────────
-// WETRIALS LOGO  (inline SVG – faithful to the actual brand)
+// WETRIALS LOGO — uses logo.png if present, falls back to logo.svg
 // ─────────────────────────────────────────────────────────────────────────────
 function WeLogo({ size = 44 }) {
+  const [src, setSrc] = useState("/logo.png");
   return (
-    <img src="/logo.svg" width={size} height={Math.round(size * 130 / 120)} alt="WeTrials" className="flex-shrink-0" />
+    <img
+      src={src}
+      onError={() => setSrc("/logo.svg")}
+      width={size}
+      height={size}
+      alt="WeTrials"
+      className="flex-shrink-0 rounded-xl object-contain"
+      style={{ minWidth: size, minHeight: size }}
+    />
   );
 }
 
@@ -86,27 +95,35 @@ function reorder(list, from, to) {
 }
 const cfgOpts = (cfg) => Object.entries(cfg).map(([v,c]) => ({ value:v, label:c.label }));
 
-/* Textarea — editable or read-only */
+/* Textarea — editable or read-only; consistent wrapping in both modes */
 function TA({ editMode, className, ...p }) {
   return (
     <textarea readOnly={!editMode} className={cn(
       "w-full text-base text-gray-700 placeholder:text-gray-300 focus:outline-none transition-colors leading-relaxed",
+      "whitespace-pre-wrap break-words overflow-wrap-anywhere",
       editMode
         ? "border border-gray-200 rounded-xl px-3.5 py-2.5 bg-white focus:border-brand-500 focus:ring-1 focus:ring-brand-500/20 resize-y"
-        : "border-transparent bg-transparent resize-none",
+        : "border-transparent bg-transparent resize-none overflow-hidden",
       className
     )} {...p} />
   );
 }
 
-/* Text input — editable or read-only */
+/* Text input — use textarea for multi-line safe display in both modes */
 function TI({ editMode, className, ...p }) {
+  if (!editMode) {
+    // In read mode use a div so long text wraps naturally
+    return (
+      <div className={cn(
+        "w-full text-base text-gray-700 leading-relaxed whitespace-pre-wrap break-words",
+        className
+      )}>{p.value || <span className="text-gray-300">{p.placeholder}</span>}</div>
+    );
+  }
   return (
-    <input readOnly={!editMode} className={cn(
+    <input className={cn(
       "w-full text-base placeholder:text-gray-300 focus:outline-none transition-colors",
-      editMode
-        ? "border border-gray-200 rounded-xl px-3.5 py-2.5 bg-white focus:border-brand-500 focus:ring-1 focus:ring-brand-500/20"
-        : "border-transparent bg-transparent text-gray-700",
+      "border border-gray-200 rounded-xl px-3.5 py-2.5 bg-white focus:border-brand-500 focus:ring-1 focus:ring-brand-500/20",
       className
     )} {...p} />
   );
@@ -202,10 +219,11 @@ function InsightRow({ item, editMode, onUpdate, onDelete, provided, snapshot }) 
       <div className="flex items-start gap-3 px-5 py-4">
         <DragHandle {...provided.dragHandleProps} />
         <div className="flex-1 min-w-0 space-y-2.5">
-          <TI editMode={editMode} value={item.title}
+          <TA editMode={editMode} value={item.title}
             onChange={e => onUpdate("title", e.target.value)}
             placeholder="Insight title…"
-            className={cn("text-lg font-semibold text-gray-900", !editMode && "px-0")} />
+            rows={1}
+            className={cn("text-lg font-semibold text-gray-900", !editMode && "px-0 border-transparent bg-transparent resize-none overflow-hidden")} />
           <TA editMode={editMode} value={item.summary}
             onChange={e => onUpdate("summary", e.target.value)}
             placeholder="What happened and why it matters…"
@@ -267,63 +285,150 @@ function InsightList({ id, items, editMode, onUpdate, onDelete, onReorder }) {
 // ─────────────────────────────────────────────────────────────────────────────
 // KPI CARDS
 // ─────────────────────────────────────────────────────────────────────────────
-function KPISection({ kpis, editMode, onChange }) {
-  function update(idx, field, val) {
-    onChange(kpis.map((k,i) => i===idx ? {...k,[field]:val} : k));
-  }
-  return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-      {kpis.map((k, idx) => {
-        const delta = pctChange(k.prevValue, k.value);
-        const isPos = delta !== null && delta > 0;
-        const isNeg = delta !== null && delta < 0;
-        const TI2 = isPos ? TrendingUp : isNeg ? TrendingDown : Minus;
-        const pc  = isPos ? "bg-emerald-50 text-emerald-700 border-emerald-200"
-                  : isNeg ? "bg-red-50 text-red-600 border-red-200"
-                  : "bg-gray-100 text-gray-500 border-gray-200";
-        return (
-          <div key={k.id} className="bg-white border border-gray-200 rounded-2xl p-5 relative group hover:border-gray-300 transition-colors">
-            {editMode && (
-              <button onClick={() => onChange(kpis.filter((_,i)=>i!==idx))}
-                className="absolute top-3 right-3 text-gray-300 hover:text-red-400 transition-colors">
-                <X size={13}/>
-              </button>
-            )}
-            <input readOnly={!editMode} value={k.label}
-              onChange={e => update(idx,"label",e.target.value)} placeholder="KPI name"
-              className="text-sm font-semibold uppercase tracking-wider text-gray-400 w-full border-0 p-0 bg-transparent focus:outline-none mb-4 pr-6" />
+function KPICard({ k, idx, editMode, onChange, onDelete }) {
+  function upd(field, val) { onChange({ ...k, [field]: val }); }
+  const delta = pctChange(k.prevValue, k.value);
+  const isPos = delta !== null && delta > 0;
+  const isNeg = delta !== null && delta < 0;
+  const TrendIcon = isPos ? TrendingUp : isNeg ? TrendingDown : Minus;
+  const deltaCls = isPos ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                 : isNeg ? "bg-red-50 text-red-600 border-red-200"
+                 : "bg-gray-100 text-gray-500 border-gray-200";
+  const accentCls = isPos ? "bg-emerald-500" : isNeg ? "bg-red-400" : "bg-gray-200";
+  const hasPrev = k.prevValue && k.prevValue.trim() !== "";
 
-            <div className="flex items-end gap-1.5 mb-3">
-              <div className="flex-1 min-w-0">
-                <div className="text-xs text-gray-400 mb-1">Prev</div>
-                <input readOnly={!editMode} value={k.prevValue}
-                  onChange={e => update(idx,"prevValue",e.target.value)} placeholder="—"
-                  className={cn("w-full text-lg font-semibold text-gray-400 focus:outline-none",
-                    editMode ? "border border-gray-200 rounded-lg px-2 py-1 bg-gray-50 focus:border-brand-500" : "border-transparent bg-transparent")} />
-              </div>
-              <span className="text-gray-300 mb-2 flex-shrink-0">→</span>
-              <div className="flex-1 min-w-0">
-                <div className="text-xs text-gray-400 mb-1">Now</div>
-                <input readOnly={!editMode} value={k.value}
-                  onChange={e => update(idx,"value",e.target.value)} placeholder="—"
-                  className={cn("w-full text-3xl font-bold text-gray-900 focus:outline-none",
-                    editMode ? "border border-gray-200 rounded-lg px-2 py-1 focus:border-brand-500" : "border-transparent bg-transparent")} />
-              </div>
+  /* shared input style */
+  const numInput = (extraCls="") => cn(
+    "focus:outline-none bg-transparent border-0 p-0 font-extrabold text-gray-900 leading-none w-full",
+    extraCls
+  );
+
+  return (
+    <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-md transition-shadow relative">
+      {/* colored accent bar */}
+      <div className={cn("h-1 w-full", accentCls)} />
+
+      <div className="p-6 flex flex-col gap-4">
+
+        {/* ── KPI label (editable) ── */}
+        <div className="flex items-start gap-2">
+          <input
+            readOnly={!editMode}
+            value={k.label}
+            onChange={e => upd("label", e.target.value)}
+            placeholder="KPI name"
+            className="flex-1 text-xs font-bold uppercase tracking-widest text-gray-400 bg-transparent border-0 p-0 focus:outline-none min-w-0"
+          />
+          {editMode && (
+            <button onClick={onDelete} className="text-gray-300 hover:text-red-400 transition-colors flex-shrink-0">
+              <X size={13}/>
+            </button>
+          )}
+        </div>
+
+        {/* ── Value area ── */}
+        {hasPrev ? (
+          /* Prev → Now layout */
+          <div className="flex items-end gap-3">
+            {/* Prev column */}
+            <div className="flex flex-col min-w-0">
+              {/* editable "Prev" label */}
+              <input
+                readOnly={!editMode}
+                value={k.prevLabel ?? "Prev"}
+                onChange={e => upd("prevLabel", e.target.value)}
+                placeholder="Prev"
+                className="text-xs text-gray-300 font-medium bg-transparent border-0 p-0 focus:outline-none mb-1 w-16"
+              />
+              <input
+                readOnly={!editMode}
+                value={k.prevValue}
+                onChange={e => upd("prevValue", e.target.value)}
+                placeholder="—"
+                className={cn("text-xl font-semibold text-gray-350 focus:outline-none bg-transparent border-0 p-0",
+                  editMode && "border border-gray-200 rounded-lg px-2 py-1 bg-gray-50 focus:border-brand-500 w-24")}
+                style={{ color: "#9ca3af" }}
+              />
             </div>
-            <div className="flex items-center gap-2">
-              <span className={cn("inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-0.5 rounded-full border", pc)}>
-                <TI2 size={11}/>{delta!==null ? `${delta>0?"+":""}${delta}%` : "—"}
-              </span>
-              <input readOnly={!editMode} value={k.sub}
-                onChange={e => update(idx,"sub",e.target.value)} placeholder="subtitle"
-                className="text-sm text-gray-400 flex-1 min-w-0 border-0 p-0 bg-transparent focus:outline-none" />
+
+            <span className="text-gray-200 text-xl pb-1 flex-shrink-0">→</span>
+
+            {/* Now column */}
+            <div className="flex flex-col flex-1 min-w-0">
+              {/* editable "Now" label */}
+              <input
+                readOnly={!editMode}
+                value={k.nowLabel ?? "Now"}
+                onChange={e => upd("nowLabel", e.target.value)}
+                placeholder="Now"
+                className="text-xs text-gray-400 font-medium bg-transparent border-0 p-0 focus:outline-none mb-1 w-16"
+              />
+              <input
+                readOnly={!editMode}
+                value={k.value}
+                onChange={e => upd("value", e.target.value)}
+                placeholder="—"
+                className={cn(numInput("text-4xl"),
+                  editMode && "border border-gray-200 rounded-lg px-2 py-1 focus:border-brand-500")}
+              />
             </div>
           </div>
-        );
-      })}
+        ) : (
+          /* No prev — just big number, centered */
+          <div className="flex flex-col items-center justify-center py-2 gap-1">
+            <input
+              readOnly={!editMode}
+              value={k.value}
+              onChange={e => upd("value", e.target.value)}
+              placeholder="—"
+              className={cn("text-center", numInput("text-5xl"),
+                editMode && "border border-gray-200 rounded-xl px-3 py-2 focus:border-brand-500 w-full")}
+            />
+            {/* In edit mode show a subtle "add prev" field */}
+            {editMode && (
+              <input
+                value={k.prevValue}
+                onChange={e => upd("prevValue", e.target.value)}
+                placeholder="+ add previous value"
+                className="mt-2 w-full text-xs text-center text-gray-300 border border-dashed border-gray-200 rounded-lg px-2 py-1 bg-transparent focus:outline-none focus:border-brand-400 placeholder:text-gray-300"
+              />
+            )}
+          </div>
+        )}
+
+        {/* ── Delta badge + subtitle ── */}
+        <div className="flex items-center gap-2 pt-2 border-t border-gray-100">
+          {(hasPrev || (!hasPrev && delta !== null)) && (
+            <span className={cn("inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full border flex-shrink-0", deltaCls)}>
+              <TrendIcon size={11}/>{delta !== null ? `${delta > 0 ? "+" : ""}${delta}%` : "—"}
+            </span>
+          )}
+          <input
+            readOnly={!editMode}
+            value={k.sub}
+            onChange={e => upd("sub", e.target.value)}
+            placeholder="add context…"
+            className="text-sm text-gray-400 flex-1 min-w-0 border-0 p-0 bg-transparent focus:outline-none"
+          />
+        </div>
+
+      </div>
+    </div>
+  );
+}
+
+function KPISection({ kpis, editMode, onChange }) {
+  function update(idx, next) { onChange(kpis.map((k,i) => i===idx ? next : k)); }
+  return (
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+      {kpis.map((k, idx) => (
+        <KPICard key={k.id} k={k} idx={idx} editMode={editMode}
+          onChange={next => update(idx, next)}
+          onDelete={() => onChange(kpis.filter((_,i)=>i!==idx))} />
+      ))}
       {editMode && (
         <button onClick={() => onChange([...kpis, makeKPI()])}
-          className="border-2 border-dashed border-gray-200 rounded-2xl p-5 text-sm text-gray-400 hover:border-brand-300 hover:text-brand-500 hover:bg-brand-50 transition-colors flex flex-col items-center justify-center gap-2 min-h-[180px]">
+          className="border-2 border-dashed border-gray-200 rounded-2xl p-5 text-sm text-gray-400 hover:border-brand-300 hover:text-brand-500 hover:bg-brand-50 transition-colors flex flex-col items-center justify-center gap-2 min-h-[200px]">
           <Plus size={20}/> Add KPI
         </button>
       )}
@@ -517,7 +622,7 @@ export default function Dashboard() {
 
       {/* ── HEADER ──────────────────────────────────────────────────────────── */}
       <header className="sticky top-0 z-40 bg-white border-b border-gray-200 no-print">
-        <div className="max-w-5xl mx-auto px-6 py-4 flex items-center gap-5 flex-wrap">
+        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center gap-5 flex-wrap">
 
           {/* Logo + brand */}
           <div className="flex items-center gap-3.5 flex-1 min-w-0">
@@ -557,24 +662,24 @@ export default function Dashboard() {
         </div>
       </header>
 
-      <main className="max-w-5xl mx-auto px-6 py-10 space-y-12">
+      <main className="max-w-6xl mx-auto px-6 py-10 space-y-12">
 
         {/* ── 01 EXECUTIVE SUMMARY — free text ──────────────────────────────── */}
         <SectionWrap number={1} title="Executive Summary" icon={BookOpen}>
-          <div className="bg-white border border-gray-200 rounded-2xl p-5">
-            <textarea
-              readOnly={!editMode}
-              value={data.executiveSummary}
-              onChange={e => set("executiveSummary", e.target.value)}
-              placeholder={"— Key achievement or milestone this month\n— Strategic update\n— Important observation\n— What changed for the business"}
-              rows={6}
-              className={cn(
-                "w-full text-base text-gray-700 leading-relaxed placeholder:text-gray-300 focus:outline-none transition-colors",
-                editMode
-                  ? "resize-y border-0 bg-transparent"
-                  : "border-transparent bg-transparent resize-none"
-              )}
-            />
+          <div className="bg-white border border-gray-200 rounded-2xl p-6">
+            {editMode ? (
+              <textarea
+                value={data.executiveSummary}
+                onChange={e => set("executiveSummary", e.target.value)}
+                placeholder={"— Key achievement or milestone this month\n— Strategic update\n— Important observation\n— What changed for the business"}
+                rows={8}
+                className="w-full text-base text-gray-700 leading-relaxed placeholder:text-gray-300 focus:outline-none resize-y border-0 bg-transparent"
+              />
+            ) : (
+              <div className="text-base text-gray-700 leading-relaxed whitespace-pre-wrap min-h-[3rem]">
+                {data.executiveSummary || <span className="text-gray-300">No summary yet — click Edit to add one.</span>}
+              </div>
+            )}
           </div>
         </SectionWrap>
 
