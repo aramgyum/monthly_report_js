@@ -11,15 +11,19 @@ import {
 import { cn } from "@/lib/utils";
 import { MONTHS, pctChange, newId } from "@/lib/utils";
 import {
-  PASSWORD, STORAGE_KEY,
+  PASSWORD,
   IMPACT_CONFIG, DIRECTION_CONFIG, STATUS_CONFIG,
   SEVERITY_CONFIG, PRIORITY_CONFIG,
   MILESTONE_STATUS_CONFIG, PARTNER_ENGAGEMENT_CONFIG,
   makeInsightItem, makeDelivery, makeRisk,
   makeKPI, makeCustomModule, makeModuleItem, makeMonthData,
   makePartnerMilestone, makeComingMonthItem, makePartner,
-  monthKey, loadStore, saveStore,
+  monthKey,
 } from "@/lib/data";
+
+const LS_KEY = "wetrials-monthly-v4";
+function lsLoad()        { try { return JSON.parse(localStorage.getItem(LS_KEY) || "{}"); } catch { return {}; } }
+function lsSave(store)   { try { localStorage.setItem(LS_KEY, JSON.stringify(store)); } catch {} }
 
 // ─────────────────────────────────────────────────────────────────────────────
 // WETRIALS LOGO — PNG with initials fallback
@@ -254,19 +258,19 @@ function InsightRow({ item, editMode, onUpdate, onDelete, provided, snapshot }) 
           className="text-sm text-gray-500" />
       </div>
 
-      {/* Right: Impact + Direction — inline label next to control */}
-      <div className="flex flex-col items-end gap-2 flex-shrink-0">
-        <div className="flex items-center gap-1.5">
+      {/* Right: Impact + Direction — each label is inline with its control */}
+      <div className="flex-shrink-0 flex flex-col items-end gap-2 min-w-[9rem]">
+        <div className="flex items-center gap-2 w-full justify-end">
           <FieldLabel title="Level of business importance: High / Medium / Low">Impact</FieldLabel>
           <SS value={item.impact} onChange={v => onUpdate("impact",v)}
             options={cfgOpts(IMPACT_CONFIG)} cfg={IMPACT_CONFIG} editMode={editMode} />
         </div>
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-2 w-full justify-end">
           <FieldLabel title="Trend direction: Positive (↑) / Neutral (→) / Negative (↓)">Direction</FieldLabel>
           <DirToggle value={item.direction} onChange={v => onUpdate("direction",v)} editMode={editMode} />
         </div>
         {editMode && (
-          <button onClick={onDelete} className="text-gray-300 hover:text-red-400 transition-colors p-1">
+          <button onClick={onDelete} className="text-gray-300 hover:text-red-400 transition-colors p-1 self-end">
             <X size={14}/>
           </button>
         )}
@@ -356,32 +360,38 @@ function KPICard({ k, idx, editMode, onChange, onDelete }) {
           )}
         </div>
 
-        {/* ── Value area — whole group centred, prev+arrow tight left of current ── */}
-        <div className="flex flex-col items-center justify-center mb-4" style={{ minHeight: "5.5rem" }}>
+        {/* ── Value area ─────────────────────────────────────────────────────
+             3-column trick: [flex-1 prev+arrow right-aligned] [current] [flex-1 spacer]
+             The two flex-1 columns are equal so the current value is DEAD CENTER.        ── */}
+        <div className="mb-4" style={{ minHeight: "5.5rem", display: "flex", alignItems: "flex-end" }}>
+          {/* Left column: prev label + value + arrow, pushed right */}
+          <div style={{ flex: 1, display: "flex", alignItems: "flex-end", justifyContent: "flex-end", gap: "4px", paddingRight: "6px", paddingBottom: "4px" }}>
+            {hasPrev && (
+              <>
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
+                  <input readOnly={!editMode} value={k.prevLabel ?? "Prev"}
+                    onChange={e => upd("prevLabel", e.target.value)}
+                    className="text-xs text-gray-400 font-medium bg-transparent border-0 p-0 focus:outline-none text-right mb-0.5"
+                    style={{ width: "2.8rem" }} />
+                  <input readOnly={!editMode} value={k.prevValue}
+                    onChange={e => upd("prevValue", e.target.value)} placeholder="—"
+                    style={{ color: "#9ca3af" }}
+                    className={cn("text-xl font-semibold text-right focus:outline-none bg-transparent border-0 p-0",
+                      editMode && "border border-gray-200 rounded-lg px-2 py-1 bg-gray-50 focus:border-brand-500 w-20")} />
+                </div>
+                <span className="text-gray-300 text-base flex-shrink-0" style={{ lineHeight: "1.75rem" }}>→</span>
+              </>
+            )}
+          </div>
+
+          {/* Center column: current value — this is what is centered */}
           {hasPrev ? (
-            <div className="flex items-end justify-center gap-1.5">
-              {/* Prev: label above value, right-aligned, bottom-aligned with arrow */}
-              <div className="flex flex-col items-end pb-1">
-                <input readOnly={!editMode} value={k.prevLabel ?? "Prev"}
-                  onChange={e => upd("prevLabel", e.target.value)}
-                  className="text-xs text-gray-400 font-medium bg-transparent border-0 p-0 focus:outline-none text-right mb-0.5"
-                  style={{ width: "2.8rem" }} />
-                <input readOnly={!editMode} value={k.prevValue}
-                  onChange={e => upd("prevValue", e.target.value)} placeholder="—"
-                  style={{ color: "#9ca3af" }}
-                  className={cn("text-xl font-semibold text-right focus:outline-none bg-transparent border-0 p-0",
-                    editMode && "border border-gray-200 rounded-lg px-2 py-1 bg-gray-50 focus:border-brand-500 w-20")} />
-              </div>
-              <span className="text-gray-300 text-base flex-shrink-0 pb-1.5">→</span>
-              {/* Current value — dominant focal point */}
-              <input readOnly={!editMode} value={k.value}
-                onChange={e => upd("value", e.target.value)} placeholder="—"
-                className={cn(numInput("text-5xl text-center"),
-                  editMode && "border border-gray-200 rounded-xl px-3 py-2 focus:border-brand-500 w-28")} />
-            </div>
+            <input readOnly={!editMode} value={k.value}
+              onChange={e => upd("value", e.target.value)} placeholder="—"
+              className={cn(numInput("text-5xl text-center"), "flex-shrink-0",
+                editMode && "border border-gray-200 rounded-xl px-3 py-2 focus:border-brand-500 w-28")} />
           ) : (
-            /* No prev — single big centred value */
-            <>
+            <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center" }}>
               <input readOnly={!editMode} value={k.value}
                 onChange={e => upd("value", e.target.value)} placeholder="—"
                 className={cn("text-center", numInput("text-5xl"),
@@ -391,8 +401,11 @@ function KPICard({ k, idx, editMode, onChange, onDelete }) {
                   placeholder="+ add previous value"
                   className="mt-2 w-full text-xs text-center text-gray-300 border border-dashed border-gray-200 rounded-lg px-2 py-1 bg-transparent focus:outline-none focus:border-brand-400 placeholder:text-gray-300" />
               )}
-            </>
+            </div>
           )}
+
+          {/* Right column: spacer mirrors the left column width */}
+          {hasPrev && <div style={{ flex: 1 }} />}
         </div>
 
         {/* ── Footer: delta badge + subtitle ── */}
@@ -561,37 +574,55 @@ export default function Dashboard() {
   const [month, setMonth]           = useState(new Date().getMonth());
   const [year, setYear]             = useState(new Date().getFullYear());
   const [data, setData]             = useState(null);
-  const [saveFlash, setSaveFlash]   = useState(false);
+  const [store, setStore]           = useState({});
+  const [storeReady, setStoreReady] = useState(false);
+  const [saveState, setSaveState]   = useState("idle"); // "idle"|"saving"|"saved"|"error"
 
-  // Check session auth on load
+  // ── Auth ──────────────────────────────────────────────────────────────────
   useEffect(() => {
     if (sessionStorage.getItem("auth") === "1") setAuthed(true);
   }, []);
 
-  // On mount: jump to the most recent month that has saved data
+  // ── On mount: load all months from GitHub, fall back to localStorage ──────
   useEffect(() => {
-    try {
-      const store = loadStore();
-      const keys  = Object.keys(store).sort().reverse(); // e.g. ["2026-03","2026-02"]
+    async function bootstrap() {
+      let loaded = {};
+      try {
+        const res  = await fetch("/api/load");
+        const json = await res.json();
+        if (json.data) {
+          loaded = json.data;
+        } else {
+          // GitHub not configured or file missing — use localStorage
+          loaded = lsLoad();
+        }
+      } catch {
+        loaded = lsLoad();
+      }
+
+      setStore(loaded);
+
+      // Jump to the most recent month that has data
+      const keys = Object.keys(loaded).sort().reverse();
       if (keys.length > 0) {
         const [y, m] = keys[0].split("-");
         setYear(parseInt(y, 10));
-        setMonth(parseInt(m, 10) - 1); // monthKey stores 1-based month
+        setMonth(parseInt(m, 10) - 1);
       }
-    } catch {}
+      setStoreReady(true);
+    }
+    bootstrap();
   }, []);
 
-  // Load data when month/year changes
+  // ── When month/year changes (after store is ready), load that month ───────
   useEffect(() => {
-    const store = loadStore();
+    if (!storeReady) return;
     const key   = monthKey(month, year);
-    // Merge with fresh defaults so any fields added in newer versions
-    // don't crash when loading older saved data.
-    const fresh  = makeMonthData();
-    const saved  = store[key] ? structuredClone(store[key]) : null;
+    const fresh = makeMonthData();
+    const saved = store[key] ? structuredClone(store[key]) : null;
     setData(saved ? { ...fresh, ...saved } : fresh);
     setEditMode(false);
-  }, [month, year]);
+  }, [month, year, storeReady]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const set = useCallback((field, val) => setData(d => ({...d,[field]:val})), []);
 
@@ -605,19 +636,33 @@ export default function Dashboard() {
     setEditMode(true);
   }
 
-  function save() {
-    const store = loadStore();
-    store[monthKey(month, year)] = data;
-    saveStore(store);
-    setSaveFlash(true);
-    setTimeout(() => setSaveFlash(false), 1800);
+  // ── Save: write to GitHub + localStorage backup ───────────────────────────
+  async function save() {
+    setSaveState("saving");
+    const updated = { ...store, [monthKey(month, year)]: data };
+    setStore(updated);
+    lsSave(updated); // always write localStorage as backup
+
+    try {
+      const res = await fetch("/api/save", {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body:    JSON.stringify(updated),
+      });
+      if (!res.ok) throw new Error("save failed");
+      setSaveState("saved");
+    } catch {
+      // GitHub save failed but localStorage backup succeeded
+      setSaveState("error");
+    }
+    setTimeout(() => setSaveState("idle"), 2500);
   }
 
-  // Navigate to (today − 1 month) — the natural "report month"
+  // ── New Report: navigate to (today − 1 month) ─────────────────────────────
   function handleNewReport() {
-    const now  = new Date();
-    let   m    = now.getMonth() - 1;
-    let   y    = now.getFullYear();
+    const now = new Date();
+    let m = now.getMonth() - 1;
+    let y = now.getFullYear();
     if (m < 0) { m = 11; y -= 1; }
     setMonth(m);
     setYear(y);
@@ -669,10 +714,16 @@ export default function Dashboard() {
               className="inline-flex items-center gap-2 text-sm font-semibold rounded-xl px-4 py-2.5 border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 transition-colors">
               <Plus size={14}/> New Report
             </button>
-            <button onClick={save}
+            <button onClick={save} disabled={saveState === "saving"}
               className={cn("inline-flex items-center gap-2 text-sm font-semibold rounded-xl px-5 py-2.5 transition-colors",
-                saveFlash ? "bg-emerald-600 text-white" : "bg-gray-900 hover:bg-gray-800 text-white")}>
-              {saveFlash ? <><Check size={15}/> Saved</> : <><Save size={15}/> Save</>}
+                saveState === "saving" ? "bg-gray-400 text-white cursor-not-allowed"
+                : saveState === "saved"   ? "bg-emerald-600 text-white"
+                : saveState === "error"   ? "bg-red-500 text-white"
+                : "bg-gray-900 hover:bg-gray-800 text-white")}>
+              {saveState === "saving" ? "Saving…"
+                : saveState === "saved"   ? <><Check size={15}/> Saved</>
+                : saveState === "error"   ? "Save failed"
+                : <><Save size={15}/> Save</>}
             </button>
             <button onClick={handleEditClick}
               className={cn("inline-flex items-center gap-2 text-sm font-semibold rounded-xl px-5 py-2.5 border transition-colors",
