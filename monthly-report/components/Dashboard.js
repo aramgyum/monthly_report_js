@@ -200,7 +200,7 @@ function SectionWrap({ number, title, icon: Icon, onAdd, addLabel = "Add", child
   return (
     <section className={cn("space-y-4", className)}>
       <div className="flex items-center justify-between pb-3 border-b border-gray-100">
-        <h2 className="flex items-center gap-2.5 text-xl font-bold text-gray-800 tracking-tight">
+        <h2 className="flex items-center gap-2.5 text-2xl font-bold text-gray-800 tracking-tight">
           {number && (
             <span className="text-sm font-bold text-gray-300 tabular-nums w-6 text-right">
               {String(number).padStart(2,"0")}
@@ -258,19 +258,19 @@ function InsightRow({ item, editMode, onUpdate, onDelete, provided, snapshot }) 
           className="text-sm text-gray-500" />
       </div>
 
-      {/* Right: Impact + Direction — each label is inline with its control */}
-      <div className="flex-shrink-0 flex flex-col items-end gap-2 min-w-[9rem]">
-        <div className="flex items-center gap-2 w-full justify-end">
+      {/* Right: Impact + Direction on ONE line */}
+      <div className="flex-shrink-0 flex items-center gap-3 flex-wrap justify-end">
+        <div className="flex items-center gap-1.5">
           <FieldLabel title="Level of business importance: High / Medium / Low">Impact</FieldLabel>
           <SS value={item.impact} onChange={v => onUpdate("impact",v)}
             options={cfgOpts(IMPACT_CONFIG)} cfg={IMPACT_CONFIG} editMode={editMode} />
         </div>
-        <div className="flex items-center gap-2 w-full justify-end">
+        <div className="flex items-center gap-1.5">
           <FieldLabel title="Trend direction: Positive (↑) / Neutral (→) / Negative (↓)">Direction</FieldLabel>
           <DirToggle value={item.direction} onChange={v => onUpdate("direction",v)} editMode={editMode} />
         </div>
         {editMode && (
-          <button onClick={onDelete} className="text-gray-300 hover:text-red-400 transition-colors p-1 self-end">
+          <button onClick={onDelete} className="text-gray-300 hover:text-red-400 transition-colors p-1">
             <X size={14}/>
           </button>
         )}
@@ -1051,6 +1051,24 @@ export default function Dashboard() {
             </DragDropContext>
           </Card>
         </SectionWrap>
+
+        {/* ── CUSTOM MODULES (dynamic — add/remove in edit mode) ───────────── */}
+        {data.customModules?.map((mod, i) => (
+          <CustomModBlock key={mod.id} mod={mod} editMode={editMode}
+            onUpdate={(k,v) => modUpd(i,k,v)}
+            onDelete={() => modDel(i)}
+            onAddItem={() => modItemAdd(i)}
+            onDeleteItem={j => modItemDel(i,j)}
+            onUpdateItem={(j,k,v) => modItemUpd(i,j,k,v)}
+            onReorderItems={next => modItemReorder(i,next)} />
+        ))}
+        {editMode && (
+          <button
+            onClick={() => setData(d => ({...d, customModules: [...(d.customModules || []), makeCustomModule()]}))}
+            className="no-print w-full inline-flex items-center justify-center gap-2 text-sm font-semibold text-gray-400 hover:text-gray-700 border-2 border-dashed border-gray-200 rounded-2xl px-8 py-5 hover:border-gray-400 hover:bg-gray-50 transition-colors">
+            <Plus size={16}/> Add Custom Module
+          </button>
+        )}
 
         <p className="text-center text-sm text-gray-300 pb-6 no-print">
           WeTrials · {MONTHS[month]} {year} · {editMode ? "Edit mode — click Save when done" : "Click Edit to make changes"}
