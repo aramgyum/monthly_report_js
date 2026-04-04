@@ -573,7 +573,11 @@ export default function Dashboard() {
   useEffect(() => {
     const store = loadStore();
     const key   = monthKey(month, year);
-    setData(store[key] ? structuredClone(store[key]) : makeMonthData());
+    // Merge with fresh defaults so any fields added in newer versions
+    // don't crash when loading older saved data.
+    const fresh  = makeMonthData();
+    const saved  = store[key] ? structuredClone(store[key]) : null;
+    setData(saved ? { ...fresh, ...saved } : fresh);
     setEditMode(false);
   }, [month, year]);
 
