@@ -1,7 +1,7 @@
 import { newId } from "./utils";
 
 export const PASSWORD     = "wtproduct2026";
-export const STORAGE_KEY  = "wetrials-monthly-v3";
+export const STORAGE_KEY  = "wetrials-monthly-v4";
 
 // ── Config maps ───────────────────────────────────────────────────────────────
 export const IMPACT_CONFIG = {
@@ -59,7 +59,7 @@ export const makeCustomModule = () => ({ id: newId(), title: "New Module", descr
 export const makeModuleItem   = () => ({ id: newId(), text: "", status: "in-progress" });
 
 export const makeMonthData = () => ({
-  executiveSummary: [],
+  executiveSummary: "",
   kpis: [
     { id: newId(), label: "Total Users",     value: "", prevValue: "", sub: "Registered"   },
     { id: newId(), label: "User Requests",   value: "", prevValue: "", sub: "All time"     },
