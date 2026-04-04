@@ -272,7 +272,7 @@ function KPISection({ kpis, editMode, onChange }) {
     onChange(kpis.map((k,i) => i===idx ? {...k,[field]:val} : k));
   }
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
       {kpis.map((k, idx) => {
         const delta = pctChange(k.prevValue, k.value);
         const isPos = delta !== null && delta > 0;
@@ -293,37 +293,23 @@ function KPISection({ kpis, editMode, onChange }) {
               onChange={e => update(idx,"label",e.target.value)} placeholder="KPI name"
               className="text-sm font-semibold uppercase tracking-wider text-gray-400 w-full border-0 p-0 bg-transparent focus:outline-none mb-4 pr-6" />
 
-            {k.prevValue ? (
-              <div className="flex items-end gap-1.5 mb-3">
-                <div className="flex-1 min-w-0">
-                  <div className="text-xs text-gray-400 mb-1">Prev</div>
-                  <input readOnly={!editMode} value={k.prevValue}
-                    onChange={e => update(idx,"prevValue",e.target.value)} placeholder="—"
-                    className={cn("w-full text-lg font-semibold text-gray-400 focus:outline-none",
-                      editMode ? "border border-gray-200 rounded-lg px-2 py-1 bg-gray-50 focus:border-brand-500" : "border-transparent bg-transparent")} />
-                </div>
-                <span className="text-gray-300 mb-2 flex-shrink-0">→</span>
-                <div className="flex-1 min-w-0">
-                  <div className="text-xs text-gray-400 mb-1">Now</div>
-                  <input readOnly={!editMode} value={k.value}
-                    onChange={e => update(idx,"value",e.target.value)} placeholder="—"
-                    className={cn("w-full text-3xl font-bold text-gray-900 focus:outline-none",
-                      editMode ? "border border-gray-200 rounded-lg px-2 py-1 focus:border-brand-500" : "border-transparent bg-transparent")} />
-                </div>
+            <div className="flex items-end gap-1.5 mb-3">
+              <div className="flex-1 min-w-0">
+                <div className="text-xs text-gray-400 mb-1">Prev</div>
+                <input readOnly={!editMode} value={k.prevValue}
+                  onChange={e => update(idx,"prevValue",e.target.value)} placeholder="—"
+                  className={cn("w-full text-lg font-semibold text-gray-400 focus:outline-none",
+                    editMode ? "border border-gray-200 rounded-lg px-2 py-1 bg-gray-50 focus:border-brand-500" : "border-transparent bg-transparent")} />
               </div>
-            ) : (
-              <div className="mb-3">
+              <span className="text-gray-300 mb-2 flex-shrink-0">→</span>
+              <div className="flex-1 min-w-0">
+                <div className="text-xs text-gray-400 mb-1">Now</div>
                 <input readOnly={!editMode} value={k.value}
                   onChange={e => update(idx,"value",e.target.value)} placeholder="—"
                   className={cn("w-full text-3xl font-bold text-gray-900 focus:outline-none",
                     editMode ? "border border-gray-200 rounded-lg px-2 py-1 focus:border-brand-500" : "border-transparent bg-transparent")} />
-                {editMode && (
-                  <input readOnly={false} value={k.prevValue}
-                    onChange={e => update(idx,"prevValue",e.target.value)} placeholder="Add prev value…"
-                    className="mt-1 w-full text-xs text-gray-300 border border-dashed border-gray-200 rounded-lg px-2 py-1 bg-transparent focus:outline-none focus:border-brand-400 focus:text-gray-400 placeholder:text-gray-300" />
-                )}
               </div>
-            )}
+            </div>
             <div className="flex items-center gap-2">
               <span className={cn("inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-0.5 rounded-full border", pc)}>
                 <TI2 size={11}/>{delta!==null ? `${delta>0?"+":""}${delta}%` : "—"}
@@ -531,7 +517,7 @@ export default function Dashboard() {
 
       {/* ── HEADER ──────────────────────────────────────────────────────────── */}
       <header className="sticky top-0 z-40 bg-white border-b border-gray-200 no-print">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center gap-5 flex-wrap">
+        <div className="max-w-5xl mx-auto px-6 py-4 flex items-center gap-5 flex-wrap">
 
           {/* Logo + brand */}
           <div className="flex items-center gap-3.5 flex-1 min-w-0">
@@ -571,7 +557,7 @@ export default function Dashboard() {
         </div>
       </header>
 
-      <main className="max-w-6xl mx-auto px-6 py-10 space-y-12">
+      <main className="max-w-5xl mx-auto px-6 py-10 space-y-12">
 
         {/* ── 01 EXECUTIVE SUMMARY — free text ──────────────────────────────── */}
         <SectionWrap number={1} title="Executive Summary" icon={BookOpen}>
