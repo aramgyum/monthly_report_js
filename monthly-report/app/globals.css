@@ -14,11 +14,14 @@
 * { box-sizing: border-box; }
 
 body {
-  background-color: #f8fafc;
+  background-color: #f1f5f9;
   color: #1f2937;
   font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
+
+/* Ensure selects never blow out their container */
+select { max-width: 100%; }
 
 /* Read-only mode: hide input chrome */
 .read-mode input,
