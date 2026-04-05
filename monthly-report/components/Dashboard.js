@@ -236,11 +236,11 @@ function InsightRow({ item, editMode, onUpdate, onDelete, provided, snapshot }) 
         <TA editMode={editMode} value={item.title}
           onChange={e => onUpdate("title", e.target.value)}
           placeholder="Insight title…" rows={1}
-          className="text-lg font-semibold text-gray-900" />
+          className="text-xl font-semibold text-gray-900 text-left" />
         <TA editMode={editMode} value={item.summary}
           onChange={e => onUpdate("summary", e.target.value)}
           placeholder="What happened and why it matters…" rows={2}
-          className="text-base text-gray-600" />
+          className="text-lg text-gray-600 text-left" />
       </div>
 
       {/* Impact badge — fixed width to align with header */}
@@ -645,16 +645,16 @@ export default function Dashboard() {
           <div className="flex items-center gap-4 flex-1 min-w-0">
             <WeLogo size={42} />
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-lg font-bold text-gray-900 whitespace-nowrap">WeTrials</span>
-              <span className="text-gray-300 text-lg hidden sm:inline">·</span>
-              <span className="text-lg font-medium text-gray-500 hidden sm:inline whitespace-nowrap">Product Monthly Report</span>
-              <span className="text-gray-300 text-lg">|</span>
+              <span className="text-xl font-bold text-gray-900 whitespace-nowrap">WeTrials</span>
+              <span className="text-gray-300 text-xl hidden sm:inline">·</span>
+              <span className="text-xl font-medium text-gray-500 hidden sm:inline whitespace-nowrap">Product Monthly Report</span>
+              <span className="text-gray-300 text-xl">|</span>
               <select value={month} onChange={e => setMonth(+e.target.value)}
-                className="text-lg font-bold text-gray-800 border-0 bg-transparent focus:outline-none cursor-pointer">
+                className="text-xl font-bold text-gray-800 border-0 bg-transparent focus:outline-none cursor-pointer">
                 {MONTHS.map((m, i) => <option key={m} value={i}>{m}</option>)}
               </select>
               <select value={year} onChange={e => setYear(+e.target.value)}
-                className="text-lg font-bold text-gray-800 border-0 bg-transparent focus:outline-none cursor-pointer w-24">
+                className="text-xl font-bold text-gray-800 border-0 bg-transparent focus:outline-none cursor-pointer w-24">
                 {[2024, 2025, 2026, 2027, 2028].map(y => <option key={y} value={y}>{y}</option>)}
               </select>
             </div>
@@ -771,7 +771,7 @@ export default function Dashboard() {
                                 <TA editMode={editMode} value={item.title}
                                   onChange={e => secUpd("delivery", idx, "title", e.target.value)}
                                   placeholder="Initiative or feature name…" rows={1}
-                                  className="flex-1 text-lg font-semibold text-gray-900" />
+                                  className="flex-1 text-xl font-semibold text-gray-900 text-left" />
                                 <div className="flex items-center gap-2.5 flex-shrink-0">
                                   <div className="w-[90px] flex justify-center">
                                     <SS value={item.priority} onChange={v => secUpd("delivery", idx, "priority", v)}
@@ -852,15 +852,29 @@ export default function Dashboard() {
                               {/* Partner + milestone + badges */}
                               <div className="flex items-start gap-3">
                                 <div className="flex-1 min-w-0 flex items-start gap-2">
-                                  <TA editMode={editMode} value={item.partner}
-                                    onChange={e => secUpd("partnerMilestones", idx, "partner", e.target.value)}
-                                    placeholder="Partner…" rows={1}
-                                    className="text-lg font-bold text-gray-900 w-40 flex-shrink-0" />
+                                  {/* Partner name — shrinks to fit its own content */}
+                                  <div className="flex-shrink-0 max-w-[220px]">
+                                    {editMode ? (
+                                      <input
+                                        value={item.partner}
+                                        onChange={e => secUpd("partnerMilestones", idx, "partner", e.target.value)}
+                                        placeholder="Partner…"
+                                        className="text-xl font-bold text-gray-900 text-left bg-transparent border border-gray-200 rounded-lg px-2 py-1 focus:outline-none focus:border-blue-400 w-full"
+                                      />
+                                    ) : (
+                                      <span className="text-xl font-bold text-gray-900 whitespace-nowrap">
+                                        {item.partner || <span className="text-gray-400 font-normal text-base">Partner…</span>}
+                                      </span>
+                                    )}
+                                  </div>
                                   {(item.milestone || editMode) && (
-                                    <TA editMode={editMode} value={item.milestone}
-                                      onChange={e => secUpd("partnerMilestones", idx, "milestone", e.target.value)}
-                                      placeholder="Milestone or achievement…" rows={1}
-                                      className="flex-1 text-lg text-gray-700" />
+                                    <>
+                                      <span className="text-gray-300 font-bold text-xl flex-shrink-0 leading-tight mt-0.5">·</span>
+                                      <TA editMode={editMode} value={item.milestone}
+                                        onChange={e => secUpd("partnerMilestones", idx, "milestone", e.target.value)}
+                                        placeholder="Milestone or achievement…" rows={1}
+                                        className="flex-1 text-xl text-gray-700 text-left" />
+                                    </>
                                   )}
                                 </div>
                                 <div className="flex items-center gap-2.5 flex-shrink-0">
@@ -930,7 +944,7 @@ export default function Dashboard() {
                             <TA editMode={editMode} value={item.text}
                               onChange={e => secUpd("comingMonthItems", idx, "text", e.target.value)}
                               placeholder="Key priority or action for next month…" rows={1}
-                              className="flex-1 text-lg font-medium text-gray-800" />
+                              className="flex-1 text-xl font-medium text-gray-800 text-left" />
                             {editMode && (
                               <button onClick={() => secDel("comingMonthItems", idx)} className="text-gray-400 hover:text-red-400 transition-colors flex-shrink-0">
                                 <X size={15} />
