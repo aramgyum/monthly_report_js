@@ -4,31 +4,46 @@
     "kpis": [
       {
         "id": "0ygluempjtnmnl3e68x",
-        "label": "Total Users - Study Finder",
+        "label": "Monthly Users - Study Finder",
         "value": "239",
         "prevValue": "179",
         "sub": "Registered"
       },
       {
-        "id": "ukazqax70oimnl3e68x",
+        "id": "icsjatrri1emnl96f49",
+        "label": "Weekly Average Users - Study Finder",
+        "value": "51",
+        "prevValue": "41",
+        "prevLabel": "Prev",
+        "nowLabel": "Now",
+        "sub": ""
+      },
+      {
+        "id": "h3y26o1r4umnl97lgf",
         "label": "User Requests",
         "value": "91",
         "prevValue": "73",
-        "sub": "All time"
+        "prevLabel": "Prev",
+        "nowLabel": "Now",
+        "sub": ""
       },
       {
-        "id": "rg4vnc26wkamnl3e68x",
-        "label": "Active Studies in DB",
-        "value": "11,218",
-        "prevValue": "",
-        "sub": "Study DB"
+        "id": "62pwoi50apnmnl98695",
+        "label": "New KPI",
+        "value": "11218",
+        "prevValue": "11326",
+        "prevLabel": "Prev",
+        "nowLabel": "Now",
+        "sub": ""
       },
       {
-        "id": "nk5hx3le58hmnl3e68x",
-        "label": "Version web App Live",
+        "id": "t3zey887jemnl998vq",
+        "label": "Version web App - LIve",
         "value": "3.7.0",
         "prevValue": "",
-        "sub": "With updates"
+        "prevLabel": "Prev",
+        "nowLabel": "Now",
+        "sub": ""
       }
     ],
     "insights": [
