@@ -110,7 +110,7 @@ const cfgOpts = (cfg) => Object.entries(cfg).map(([v,c]) => ({ value:v, label:c.
 function TA({ editMode, className, ...p }) {
   return (
     <textarea readOnly={!editMode} className={cn(
-      "w-full text-base text-gray-700 placeholder:text-gray-300 focus:outline-none transition-colors leading-relaxed",
+      "w-full text-base text-gray-800 placeholder:text-gray-400 focus:outline-none transition-colors leading-relaxed",
       "whitespace-pre-wrap break-words overflow-wrap-anywhere",
       editMode
         ? "border border-gray-200 rounded-xl px-3.5 py-2.5 bg-white focus:border-brand-500 focus:ring-1 focus:ring-brand-500/20 resize-y"
@@ -126,9 +126,9 @@ function TI({ editMode, className, ...p }) {
     // In read mode use a div so long text wraps naturally
     return (
       <div className={cn(
-        "w-full text-base text-gray-700 leading-relaxed whitespace-pre-wrap break-words",
+        "w-full text-base text-gray-800 leading-relaxed whitespace-pre-wrap break-words",
         className
-      )}>{p.value || <span className="text-gray-300">{p.placeholder}</span>}</div>
+      )}>{p.value || <span className="text-gray-400">{p.placeholder}</span>}</div>
     );
   }
   return (
@@ -147,7 +147,7 @@ function SS({ value, onChange, options, cfg, editMode, className }) {
   if (!editMode) {
     return (
       <span className={cn(
-        "inline-flex items-center rounded-full border px-3 py-1 text-sm font-medium whitespace-nowrap leading-none",
+        "inline-flex items-center rounded-full border px-4 py-1.5 text-sm font-semibold whitespace-nowrap leading-none",
         baseCls
       )}>
         {sel?.label || value}
@@ -156,7 +156,7 @@ function SS({ value, onChange, options, cfg, editMode, className }) {
   }
   return (
     <select value={value} onChange={e => onChange(e.target.value)} className={cn(
-      "inline-flex rounded-full border px-3 py-1 text-sm font-medium focus:outline-none cursor-pointer",
+      "inline-flex rounded-full border px-4 py-1.5 text-sm font-semibold focus:outline-none cursor-pointer",
       "transition-colors appearance-none whitespace-nowrap leading-none",
       baseCls, className
     )}>
@@ -168,8 +168,8 @@ function SS({ value, onChange, options, cfg, editMode, className }) {
 /* Drag handle */
 function DragHandle(dragProps) {
   return (
-    <span {...dragProps} className="no-print flex-shrink-0 cursor-grab active:cursor-grabbing text-gray-300 hover:text-gray-400 transition-colors self-start mt-3" title="Drag to reorder">
-      <GripVertical size={16} />
+    <span {...dragProps} className="no-print flex-shrink-0 cursor-grab active:cursor-grabbing text-gray-400 hover:text-gray-600 transition-colors self-start mt-3.5" title="Drag to reorder">
+      <GripVertical size={18} />
     </span>
   );
 }
@@ -186,7 +186,7 @@ function DirToggle({ value, onChange, editMode }) {
       !editMode && "pointer-events-none")}>
       {btns.map(b => (
         <button key={b.v} onClick={() => editMode && onChange(b.v)}
-          className={cn("px-2.5 py-1 text-sm font-semibold transition-colors leading-none",
+          className={cn("px-3 py-1.5 text-sm font-bold transition-colors leading-none",
             value === b.v ? b.on : "bg-white text-gray-300 hover:bg-gray-50")}>
           {b.icon}
         </button>
@@ -199,20 +199,20 @@ function DirToggle({ value, onChange, editMode }) {
 function SectionWrap({ number, title, icon: Icon, onAdd, addLabel = "Add", children, className }) {
   return (
     <section className={cn("space-y-4", className)}>
-      <div className="flex items-center justify-between pb-3 border-b border-gray-100">
-        <h2 className="flex items-center gap-2.5 text-2xl font-bold text-gray-800 tracking-tight">
+      <div className="flex items-center justify-between pb-4 border-b border-gray-200">
+        <h2 className="flex items-center gap-3 text-2xl font-bold text-gray-900 tracking-tight">
           {number && (
-            <span className="text-sm font-bold text-gray-300 tabular-nums w-6 text-right">
+            <span className="text-base font-bold text-gray-400 tabular-nums w-7 text-right">
               {String(number).padStart(2,"0")}
             </span>
           )}
-          <Icon size={17} className="text-gray-400 flex-shrink-0" />
+          <Icon size={20} className="text-gray-500 flex-shrink-0" />
           {title}
         </h2>
         {onAdd && (
           <button onClick={onAdd}
-            className="no-print inline-flex items-center gap-1.5 text-xs font-semibold text-gray-500 hover:text-gray-900 border border-gray-200 rounded-full px-3 py-1.5 hover:bg-gray-50 transition-colors">
-            <Plus size={11}/> {addLabel}
+            className="no-print inline-flex items-center gap-1.5 text-sm font-semibold text-gray-600 hover:text-gray-900 border border-gray-300 rounded-full px-4 py-2 hover:bg-gray-50 transition-colors">
+            <Plus size={13}/> {addLabel}
           </button>
         )}
       </div>
@@ -223,7 +223,7 @@ function SectionWrap({ number, title, icon: Icon, onAdd, addLabel = "Add", child
 
 /* Card wrapper */
 function Card({ className, children }) {
-  return <div className={cn("bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm", className)}>{children}</div>;
+  return <div className={cn("bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm", className)}>{children}</div>;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -231,7 +231,7 @@ function Card({ className, children }) {
 // ─────────────────────────────────────────────────────────────────────────────
 function FieldLabel({ children, title }) {
   return (
-    <span className="text-xs font-semibold uppercase tracking-wider text-gray-300 select-none" title={title}>
+    <span className="text-sm font-bold uppercase tracking-widest text-gray-500 select-none" title={title}>
       {children}
     </span>
   );
@@ -240,7 +240,7 @@ function FieldLabel({ children, title }) {
 function InsightRow({ item, editMode, onUpdate, onDelete, provided, snapshot }) {
   return (
     <div ref={provided.innerRef} {...provided.draggableProps}
-      className={cn("item-row flex items-start gap-3 px-5 py-5 group hover:bg-gray-50/60 transition-colors",
+      className={cn("item-row flex items-start gap-4 px-6 py-6 group hover:bg-gray-50/60 transition-colors",
         snapshot.isDragging && "bg-white shadow-lg rounded-2xl")}>
       <DragHandle {...provided.dragHandleProps} />
 
@@ -250,12 +250,12 @@ function InsightRow({ item, editMode, onUpdate, onDelete, provided, snapshot }) 
         <TA editMode={editMode} value={item.title}
           onChange={e => onUpdate("title", e.target.value)}
           placeholder="Insight title…" rows={1}
-          className={cn("text-base font-semibold text-gray-900",
+          className={cn("text-lg font-semibold text-gray-900",
             !editMode && "px-0 border-transparent bg-transparent resize-none overflow-hidden")} />
         <TA editMode={editMode} value={item.summary}
           onChange={e => onUpdate("summary", e.target.value)}
           placeholder="What happened and why it matters…" rows={2}
-          className="text-sm text-gray-500" />
+          className="text-base text-gray-600" />
       </div>
 
       {/* Right: Impact + Direction on ONE line */}
@@ -342,7 +342,7 @@ function KPICard({ k, idx, editMode, onChange, onDelete }) {
       {/* colored accent bar */}
       <div className={cn("h-0.5 w-full", accentCls)} />
 
-      <div className="px-6 pt-5 pb-5 flex flex-col gap-0">
+      <div className="px-7 pt-6 pb-6 flex flex-col gap-0">
 
         {/* ── KPI label + delete ── */}
         <div className="flex items-center justify-between mb-4">
@@ -351,7 +351,7 @@ function KPICard({ k, idx, editMode, onChange, onDelete }) {
             value={k.label}
             onChange={e => upd("label", e.target.value)}
             placeholder="KPI name"
-            className="flex-1 text-xs font-bold uppercase tracking-widest text-gray-400 bg-transparent border-0 p-0 focus:outline-none min-w-0"
+            className="flex-1 text-sm font-bold uppercase tracking-widest text-gray-600 bg-transparent border-0 p-0 focus:outline-none min-w-0"
           />
           {editMode && (
             <button onClick={onDelete} className="text-gray-300 hover:text-red-400 transition-colors flex-shrink-0 ml-2">
@@ -364,7 +364,7 @@ function KPICard({ k, idx, editMode, onChange, onDelete }) {
              Read mode  : prev+arrow as small text, current as a <div> (no clipping)
              Edit mode  : inputs with fixed widths
              3-col flex : [flex-1 left][center][flex-1 right] keeps center DEAD CENTER ── */}
-        <div className="flex items-end mb-4" style={{ minHeight: "5.5rem" }}>
+        <div className="flex items-end mb-5" style={{ minHeight: "7rem" }}>
 
           {/* Left: prev label + value + arrow — right-aligned in its flex-1 column */}
           <div className="flex-1 flex items-end justify-end gap-1 pb-1 pr-1.5">
@@ -372,22 +372,22 @@ function KPICard({ k, idx, editMode, onChange, onDelete }) {
               <>
                 <div className="flex flex-col items-end">
                   <span className="text-xs text-gray-400 font-medium mb-0.5">{k.prevLabel ?? "Prev"}</span>
-                  <span className="text-xl font-semibold" style={{ color: "#9ca3af" }}>{k.prevValue || "—"}</span>
+                  <span className="text-2xl font-semibold" style={{ color: "#9ca3af" }}>{k.prevValue || "—"}</span>
                 </div>
-                <span className="text-gray-300 text-base" style={{ lineHeight: "1.75rem" }}>→</span>
+                <span className="text-gray-400 text-lg" style={{ lineHeight: "2rem" }}>→</span>
               </>
             )}
             {hasPrev && editMode && (
               <>
                 <div className="flex flex-col items-end">
                   <input value={k.prevLabel ?? "Prev"} onChange={e => upd("prevLabel", e.target.value)}
-                    className="text-xs text-gray-400 font-medium bg-transparent border-0 p-0 focus:outline-none text-right mb-0.5"
-                    style={{ width: "2.8rem" }} />
+                    className="text-sm text-gray-500 font-medium bg-transparent border-0 p-0 focus:outline-none text-right mb-0.5"
+                    style={{ width: "3rem" }} />
                   <input value={k.prevValue} onChange={e => upd("prevValue", e.target.value)} placeholder="—"
-                    style={{ color: "#9ca3af", width: "4.5rem" }}
-                    className="text-xl font-semibold text-right focus:outline-none border border-gray-200 rounded-lg px-2 py-1 bg-gray-50 focus:border-brand-500" />
+                    style={{ color: "#9ca3af", width: "5rem" }}
+                    className="text-2xl font-semibold text-right focus:outline-none border border-gray-200 rounded-lg px-2 py-1 bg-gray-50 focus:border-brand-500" />
                 </div>
-                <span className="text-gray-300 text-base" style={{ lineHeight: "1.75rem" }}>→</span>
+                <span className="text-gray-400 text-lg" style={{ lineHeight: "2rem" }}>→</span>
               </>
             )}
           </div>
@@ -396,10 +396,10 @@ function KPICard({ k, idx, editMode, onChange, onDelete }) {
           <div className="flex-shrink-0 flex flex-col items-center">
             {editMode ? (
               <input value={k.value} onChange={e => upd("value", e.target.value)} placeholder="—"
-                className="text-5xl font-extrabold text-gray-900 text-center leading-none focus:outline-none border border-gray-200 rounded-xl px-3 py-2 bg-white focus:border-brand-500"
-                style={{ width: "7rem" }} />
+                className="text-6xl font-extrabold text-gray-900 text-center leading-none focus:outline-none border border-gray-200 rounded-xl px-3 py-2 bg-white focus:border-brand-500"
+                style={{ width: "8rem" }} />
             ) : (
-              <div className="text-5xl font-extrabold text-gray-900 text-center leading-none">
+              <div className="text-6xl font-extrabold text-gray-900 text-center leading-none">
                 {k.value || "—"}
               </div>
             )}
@@ -418,14 +418,14 @@ function KPICard({ k, idx, editMode, onChange, onDelete }) {
         {/* ── Footer: delta badge + subtitle ── */}
         <div className="flex items-center gap-2 pt-3 border-t border-gray-100 mt-auto">
           {hasPrev && (
-            <span className={cn("inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full border flex-shrink-0", deltaCls)}>
-              <TrendIcon size={10}/>{delta !== null ? `${delta > 0 ? "+" : ""}${delta}%` : "—"}
+            <span className={cn("inline-flex items-center gap-1 text-sm font-bold px-3 py-1.5 rounded-full border flex-shrink-0", deltaCls)}>
+              <TrendIcon size={12}/>{delta !== null ? `${delta > 0 ? "+" : ""}${delta}%` : "—"}
             </span>
           )}
           <input readOnly={!editMode} value={k.sub}
             onChange={e => upd("sub", e.target.value)}
             placeholder="add context…"
-            className="text-sm text-gray-400 flex-1 min-w-0 border-0 p-0 bg-transparent focus:outline-none" />
+            className="text-base text-gray-500 flex-1 min-w-0 border-0 p-0 bg-transparent focus:outline-none" />
         </div>
 
       </div>
@@ -659,6 +659,7 @@ export default function Dashboard() {
       // 501 = GitHub env vars not set yet; localStorage backup already written above
       if (!res.ok && res.status !== 501) throw new Error("save failed");
       setSaveState("saved");
+      setEditMode(false); // switch to read/preview mode immediately after save
     } catch {
       // Network error — data still in localStorage
       setSaveState("error");
@@ -750,18 +751,18 @@ export default function Dashboard() {
 
         {/* ── 01 EXECUTIVE SUMMARY — free text ──────────────────────────────── */}
         <SectionWrap number={1} title="Executive Summary" icon={BookOpen}>
-          <div className="bg-white border border-gray-200 rounded-2xl p-6">
+          <div className="bg-white border border-gray-200 rounded-2xl p-8">
             {editMode ? (
               <textarea
                 value={data.executiveSummary}
                 onChange={e => set("executiveSummary", e.target.value)}
                 placeholder={"— Key achievement or milestone this month\n— Strategic update\n— Important observation\n— What changed for the business"}
                 rows={8}
-                className="w-full text-base text-gray-700 leading-relaxed placeholder:text-gray-300 focus:outline-none resize-y border-0 bg-transparent"
+                className="w-full text-lg text-gray-700 leading-relaxed placeholder:text-gray-400 focus:outline-none resize-y border-0 bg-transparent"
               />
             ) : (
-              <div className="text-base text-gray-700 leading-relaxed whitespace-pre-wrap min-h-[3rem]">
-                {data.executiveSummary || <span className="text-gray-300">No summary yet — click Edit to add one.</span>}
+              <div className="text-lg text-gray-700 leading-relaxed whitespace-pre-wrap min-h-[3rem]">
+                {data.executiveSummary || <span className="text-gray-400">No summary yet — click Edit to add one.</span>}
               </div>
             )}
           </div>
@@ -801,12 +802,12 @@ export default function Dashboard() {
                       <Draggable key={item.id} draggableId={item.id} index={idx}>
                         {(prov2, snap2) => (
                           <div ref={prov2.innerRef} {...prov2.draggableProps}
-                            className={cn("item-row flex items-start gap-3 px-5 py-4 group hover:bg-gray-50/60 transition-colors",
+                            className={cn("item-row flex items-start gap-4 px-6 py-5 group hover:bg-gray-50/60 transition-colors",
                               snap2.isDragging && "bg-white shadow-lg rounded-2xl")}>
                             <DragHandle {...prov2.dragHandleProps} />
                             <div className="flex-1 min-w-0">
                               {/* Row 1: label strip */}
-                              <div className="flex items-center justify-between mb-0.5">
+                              <div className="flex items-center justify-between mb-1">
                                 <FieldLabel title="Name of the initiative or feature being delivered">Initiative / Feature</FieldLabel>
                                 <div className="flex items-center gap-4">
                                   <FieldLabel title="Importance level: Highest / High / Medium / Low">Priority</FieldLabel>
@@ -818,27 +819,27 @@ export default function Dashboard() {
                                 <TA editMode={editMode} value={item.title}
                                   onChange={e => secUpd("delivery",idx,"title",e.target.value)}
                                   placeholder="Initiative or feature name…" rows={1}
-                                  className="flex-1 text-base font-semibold text-gray-900"/>
-                                <div className="flex items-center gap-2 flex-shrink-0">
+                                  className="flex-1 text-lg font-semibold text-gray-900"/>
+                                <div className="flex items-center gap-2.5 flex-shrink-0">
                                   <SS value={item.priority} onChange={v => secUpd("delivery",idx,"priority",v)}
                                     options={cfgOpts(PRIORITY_CONFIG)} cfg={PRIORITY_CONFIG} editMode={editMode}/>
                                   <SS value={item.status} onChange={v => secUpd("delivery",idx,"status",v)}
                                     options={cfgOpts(STATUS_CONFIG)} cfg={STATUS_CONFIG} editMode={editMode}/>
                                   {editMode && (
                                     <button onClick={() => secDel("delivery",idx)}
-                                      className="text-gray-300 hover:text-red-400 transition-colors flex-shrink-0">
-                                      <X size={14}/>
+                                      className="text-gray-400 hover:text-red-400 transition-colors flex-shrink-0">
+                                      <X size={15}/>
                                     </button>
                                   )}
                                 </div>
                               </div>
                               {/* Row 3: notes full width */}
-                              <div className="mt-2.5">
+                              <div className="mt-3">
                                 <FieldLabel title="What is happening and why it matters">Notes</FieldLabel>
                                 <TA editMode={editMode} value={item.notes}
                                   onChange={e => secUpd("delivery",idx,"notes",e.target.value)}
                                   placeholder="What is happening and why it matters…" rows={2}
-                                  className="text-sm text-gray-500 w-full"/>
+                                  className="text-base text-gray-600 w-full"/>
                               </div>
                             </div>
                           </div>
@@ -872,19 +873,19 @@ export default function Dashboard() {
                       <Draggable key={item.id} draggableId={item.id} index={idx}>
                         {(prov2, snap2) => (
                           <div ref={prov2.innerRef} {...prov2.draggableProps}
-                            className={cn("item-row flex items-start gap-3 px-5 py-4 group hover:bg-gray-50/60 transition-colors",
+                            className={cn("item-row flex items-start gap-4 px-6 py-5 group hover:bg-gray-50/60 transition-colors",
                               snap2.isDragging && "bg-white shadow-md rounded-2xl")}>
                             <DragHandle {...prov2.dragHandleProps}/>
                             <div className="flex-1 min-w-0">
                               {/* Row 1: label strip */}
-                              <div className="flex items-center justify-between mb-0.5">
+                              <div className="flex items-center justify-between mb-1">
                                 <div className="flex items-center gap-3">
                                   <FieldLabel title="Name of the partner organisation">Partner</FieldLabel>
-                                  <span className="text-gray-200 text-xs">·</span>
+                                  <span className="text-gray-300 text-sm">·</span>
                                   <FieldLabel title="What was achieved or delivered">Milestone / Achievement</FieldLabel>
                                 </div>
                                 <div className="flex items-center gap-4">
-                                  <FieldLabel title="Milestone status">Status</FieldLabel>
+                                  <FieldLabel title="Milestone progress status">Progress</FieldLabel>
                                   <FieldLabel title="Importance level">Priority</FieldLabel>
                                 </div>
                               </div>
@@ -894,35 +895,35 @@ export default function Dashboard() {
                                   <TA editMode={editMode} value={item.partner}
                                     onChange={e => secUpd("partnerMilestones",idx,"partner",e.target.value)}
                                     placeholder="Partner name…" rows={1}
-                                    className="text-base font-semibold text-gray-900 w-36 flex-shrink-0"/>
+                                    className="text-lg font-semibold text-gray-900 w-40 flex-shrink-0"/>
                                   {(item.milestone || editMode) && (
                                     <TA editMode={editMode} value={item.milestone}
                                       onChange={e => secUpd("partnerMilestones",idx,"milestone",e.target.value)}
                                       placeholder="Milestone or achievement…" rows={1}
-                                      className="flex-1 text-base text-gray-700"/>
+                                      className="flex-1 text-lg text-gray-700"/>
                                   )}
                                 </div>
-                                <div className="flex items-center gap-2 flex-shrink-0">
+                                <div className="flex items-center gap-2.5 flex-shrink-0">
                                   <SS value={item.status} onChange={v => secUpd("partnerMilestones",idx,"status",v)}
                                     options={cfgOpts(MILESTONE_STATUS_CONFIG)} cfg={MILESTONE_STATUS_CONFIG} editMode={editMode}/>
                                   <SS value={item.priority ?? "medium"} onChange={v => secUpd("partnerMilestones",idx,"priority",v)}
                                     options={cfgOpts(PRIORITY_CONFIG)} cfg={PRIORITY_CONFIG} editMode={editMode}/>
                                   {editMode && (
                                     <button onClick={() => secDel("partnerMilestones",idx)}
-                                      className="text-gray-300 hover:text-red-400 transition-colors flex-shrink-0">
-                                      <X size={14}/>
+                                      className="text-gray-400 hover:text-red-400 transition-colors flex-shrink-0">
+                                      <X size={15}/>
                                     </button>
                                   )}
                                 </div>
                               </div>
                               {/* Row 3: note full width */}
                               {(item.note || editMode) && (
-                                <div className="mt-2.5">
+                                <div className="mt-3">
                                   <FieldLabel title="Additional context or detail">Note</FieldLabel>
                                   <TA editMode={editMode} value={item.note}
                                     onChange={e => secUpd("partnerMilestones",idx,"note",e.target.value)}
                                     placeholder="Additional context or detail…" rows={1}
-                                    className="text-sm text-gray-500 w-full"/>
+                                    className="text-base text-gray-600 w-full"/>
                                 </div>
                               )}
                             </div>
@@ -957,20 +958,20 @@ export default function Dashboard() {
                       <Draggable key={item.id} draggableId={item.id} index={idx}>
                         {(prov2, snap2) => (
                           <div ref={prov2.innerRef} {...prov2.draggableProps}
-                            className={cn("item-row flex items-center gap-3 px-5 py-3.5 group hover:bg-gray-50/60 transition-colors",
+                            className={cn("item-row flex items-center gap-4 px-6 py-4 group hover:bg-gray-50/60 transition-colors",
                               snap2.isDragging && "bg-white shadow-md rounded-2xl")}>
                             <DragHandle {...prov2.dragHandleProps}/>
-                            <span className="text-gray-300 font-bold text-sm tabular-nums flex-shrink-0">
+                            <span className="text-gray-400 font-bold text-base tabular-nums flex-shrink-0 w-7 text-right">
                               {String(idx + 1).padStart(2,"0")}
                             </span>
                             <TA editMode={editMode} value={item.text}
                               onChange={e => secUpd("comingMonthItems",idx,"text",e.target.value)}
                               placeholder="Key priority or action for next month…" rows={1}
-                              className="flex-1 text-base font-medium text-gray-800"/>
+                              className="flex-1 text-lg font-medium text-gray-800"/>
                             {editMode && (
                               <button onClick={() => secDel("comingMonthItems",idx)}
-                                className="text-gray-300 hover:text-red-400 transition-colors flex-shrink-0">
-                                <X size={14}/>
+                                className="text-gray-400 hover:text-red-400 transition-colors flex-shrink-0">
+                                <X size={15}/>
                               </button>
                             )}
                           </div>
@@ -991,13 +992,13 @@ export default function Dashboard() {
           addLabel="Add risk">
           <Card>
             {data.risks.length > 0 && (
-              <div className="flex items-center gap-3 px-5 pt-4 pb-2 border-b border-gray-100">
+              <div className="flex items-center gap-4 px-6 pt-5 pb-3 border-b border-gray-200">
                 <span className="w-4 flex-shrink-0"/>
-                <div className="flex-1 grid gap-3" style={{gridTemplateColumns:"1fr 100px 1fr 110px"}}>
-                  <span className="text-xs font-bold uppercase tracking-widest text-gray-300">Risk / Constraint</span>
-                  <span className="text-xs font-bold uppercase tracking-widest text-gray-300">Severity</span>
-                  <span className="text-xs font-bold uppercase tracking-widest text-gray-300">Mitigation</span>
-                  <span className="text-xs font-bold uppercase tracking-widest text-gray-300">Owner</span>
+                <div className="flex-1 grid gap-3" style={{gridTemplateColumns:"1fr 110px 1fr 120px"}}>
+                  <span className="text-sm font-bold uppercase tracking-widest text-gray-500">Risk / Constraint</span>
+                  <span className="text-sm font-bold uppercase tracking-widest text-gray-500">Severity</span>
+                  <span className="text-sm font-bold uppercase tracking-widest text-gray-500">Mitigation</span>
+                  <span className="text-sm font-bold uppercase tracking-widest text-gray-500">Owner</span>
                 </div>
               </div>
             )}
@@ -1015,27 +1016,27 @@ export default function Dashboard() {
                       <Draggable key={item.id} draggableId={item.id} index={idx}>
                         {(prov2, snap2) => (
                           <div ref={prov2.innerRef} {...prov2.draggableProps}
-                            className={cn("item-row flex items-start gap-3 px-5 py-3.5 group hover:bg-gray-50/60 transition-colors",
+                            className={cn("item-row flex items-start gap-4 px-6 py-4 group hover:bg-gray-50/60 transition-colors",
                               snap2.isDragging && "bg-white shadow-md rounded-2xl")}>
                             <DragHandle {...prov2.dragHandleProps} />
                             <div className="flex-1 min-w-0 grid gap-3 items-start"
-                              style={{gridTemplateColumns:"1fr 100px 1fr 110px"}}>
+                              style={{gridTemplateColumns:"1fr 110px 1fr 120px"}}>
                               <TA editMode={editMode} value={item.text}
                                 onChange={e => secUpd("risks",idx,"text",e.target.value)}
-                                placeholder="Risk or constraint…" rows={1}/>
+                                placeholder="Risk or constraint…" rows={1} className="text-base text-gray-800"/>
                               <SS value={item.severity} onChange={v => secUpd("risks",idx,"severity",v)}
                                 options={cfgOpts(SEVERITY_CONFIG)} cfg={SEVERITY_CONFIG} editMode={editMode}/>
                               <TA editMode={editMode} value={item.mitigation}
                                 onChange={e => secUpd("risks",idx,"mitigation",e.target.value)}
-                                placeholder="Mitigation…" rows={1} className="text-gray-500"/>
+                                placeholder="Mitigation…" rows={1} className="text-base text-gray-600"/>
                               <div className="flex items-start gap-2">
                                 <TA editMode={editMode} value={item.owner}
                                   onChange={e => secUpd("risks",idx,"owner",e.target.value)}
-                                  placeholder="Owner…" rows={1} className="flex-1 text-gray-500"/>
+                                  placeholder="Owner…" rows={1} className="flex-1 text-base text-gray-600"/>
                                 {editMode && (
                                   <button onClick={() => secDel("risks",idx)}
-                                    className="text-gray-300 hover:text-red-400 transition-colors pt-2 flex-shrink-0">
-                                    <X size={14}/>
+                                    className="text-gray-400 hover:text-red-400 transition-colors pt-2 flex-shrink-0">
+                                    <X size={15}/>
                                   </button>
                                 )}
                               </div>
