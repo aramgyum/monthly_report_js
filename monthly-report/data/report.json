@@ -4,29 +4,29 @@
     "kpis": [
       {
         "id": "0ygluempjtnmnl3e68x",
-        "label": "Total Users",
-        "value": "501",
-        "prevValue": "",
+        "label": "Total Users - Study Finder",
+        "value": "239",
+        "prevValue": "179",
         "sub": "Registered"
       },
       {
         "id": "ukazqax70oimnl3e68x",
         "label": "User Requests",
-        "value": "556",
-        "prevValue": "",
+        "value": "91",
+        "prevValue": "73",
         "sub": "All time"
       },
       {
         "id": "rg4vnc26wkamnl3e68x",
-        "label": "Total Studies",
-        "value": "",
+        "label": "Active Studies in DB",
+        "value": "11218",
         "prevValue": "",
         "sub": "Study DB"
       },
       {
         "id": "nk5hx3le58hmnl3e68x",
-        "label": "Active Partners",
-        "value": "",
+        "label": "Version web App Live",
+        "value": "3.7.0",
         "prevValue": "",
         "sub": "With updates"
       }
