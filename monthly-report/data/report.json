@@ -40,11 +40,54 @@
         "direction": "neutral"
       }
     ],
-    "delivery": [],
-    "partnerMilestones": [],
-    "comingMonthItems": [],
-    "risks": [],
+    "delivery": [
+      {
+        "id": "gkwqwo3xojlmnl6omlf",
+        "title": "11",
+        "status": "in-progress",
+        "priority": "medium",
+        "notes": "1111"
+      }
+    ],
+    "partnerMilestones": [
+      {
+        "id": "nsx9o6s1pdmnl6oudz",
+        "partner": "11111",
+        "milestone": "1111",
+        "status": "in-progress",
+        "priority": "medium",
+        "note": "11111"
+      }
+    ],
+    "comingMonthItems": [
+      {
+        "id": "tf5pkpxli7gmnl6oz82",
+        "text": "1111111"
+      }
+    ],
+    "risks": [
+      {
+        "id": "1xy18f2prnaimnl6p167",
+        "text": "1111",
+        "severity": "medium",
+        "mitigation": "111",
+        "owner": ""
+      }
+    ],
     "partners": [],
-    "customModules": []
+    "customModules": [
+      {
+        "id": "cezce8jvixhmnl6p3fn",
+        "title": "New Module",
+        "description": "",
+        "items": [
+          {
+            "id": "sqnxwbnhfm8mnl6p4n2",
+            "text": "111111",
+            "status": "in-progress"
+          }
+        ]
+      }
+    ]
   }
 }
