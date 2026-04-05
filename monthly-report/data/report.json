@@ -54,6 +54,34 @@
         "status": "in-progress",
         "priority": "highest",
         "notes": "Early delivery in progress for validate engagement evaluation and move with  with planned improvements."
+      },
+      {
+        "id": "6ti38ard7somnl75pez",
+        "title": "AI Medical Analyzer",
+        "status": "in-progress",
+        "priority": "high",
+        "notes": "Core capability under development, expected to significantly impact product differentiation."
+      },
+      {
+        "id": "dpbxwu8ruh9mnl76e34",
+        "title": "Enrollment Tracking Dashboard",
+        "status": "in-progress",
+        "priority": "high",
+        "notes": ""
+      },
+      {
+        "id": "td9ov5nq98mnl77dfb",
+        "title": "Enhancment Sponsoered Study Logic",
+        "status": "in-progress",
+        "priority": "medium",
+        "notes": ""
+      },
+      {
+        "id": "xnzchktlx5dmnl782vm",
+        "title": "",
+        "status": "in-progress",
+        "priority": "medium",
+        "notes": ""
       }
     ],
     "partnerMilestones": [
