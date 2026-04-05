@@ -1,6 +1,6 @@
 {
   "2026-03": {
-    "executiveSummary": "Product Team is making progress on AI-driven capabilities, with the AI Assistant and Medical Analyzer emerging as core differentiators; however, user engagement remains the primary gap requiring immediate focus.\n\nOver the past month, the platform continued advancing toward its AI-driven vision, with meaningful progress across core product capabilities and partner initiatives.\n\nUser activity shows early positive signals, including growth in registrations and requests. However, engagement depth remains low, indicating friction in activation, onboarding, and overall user experience.\n\nDelivery timelines remain under pressure due to the adoption of new AI-driven workflows and cross-team dependencies. These challenges are expected to stabilize as processes mature.\n\nStrategic collaboration with partners (BCC, ABTA) continues to validate product direction and long-term opportunity, though impact remains dependent on execution consistency.\n\nThe SR&ED FY2025 cycle has been successfully completed, enabling focus on FY2026 initiatives and continued product development.",
+    "executiveSummary": "Product Team is making progress on AI-driven capabilities, with the AI Assistant and Medical Analyzer emerging as core differentiators; however, user engagement remains the primary gap requiring immediate focus.\n\nThe platform delivered 3 completed initiatives and 800+ new pediatric cancer studies this month. Monthly Study Finder users grew 34% (179 → 239) and requests up 25% (73 → 91), though engagement depth remains low — pointing to friction in activation and onboarding.\n\n2 of 5 active initiatives are running past target due to new AI workflows and cross-team dependencies; stabilization expected as processes mature. BCC Enrollment Dashboard received positive reception at their annual meeting; Ono Pharmaceutical and Alpheus Medical studies added through ABTA.\n\nSR&ED FY2025 completed (7 experiments, 43 weeks), freeing capacity for FY2026 development.",
     "kpis": [
       {
         "id": "0ygluempjtnmnl3e68x",
@@ -140,27 +140,27 @@
     "comingMonthItems": [
       {
         "id": "tf5pkpxli7gmnl6oz82",
-        "text": "Continue development and complete WeTrials AI Assistant"
+        "text": "Complete AI Assistant"
       },
       {
         "id": "igx2fn3bbimnl7fwuh",
-        "text": "Continue development and complete AI Medical Analyzer"
+        "text": "Complete AI Medical Analyzer"
       },
       {
         "id": "865gpbhurvvmnl7g7ft",
-        "text": "Enhance and expand Enrollment Tracking Dashboard (BCC)"
-      },
-      {
-        "id": "3zsuh6aiupwmnl7hrjh",
-        "text": "Recommendation System Integration (Content Matching)"
+        "text": "Enrollment Dashboard (BCC) - Review and Aggregated data layer live; BCC sign-off received"
       },
       {
         "id": "29onaxxnhiymnl7h82j",
         "text": "Media and video integration into study details"
       },
       {
-        "id": "t0u91zt3ehmnl7gqwd",
-        "text": "Implement planned product and UX improvements"
+        "id": "3zsuh6aiupwmnl7hrjh",
+        "text": "Recommendation System Integration (Content Matching)"
+      },
+      {
+        "id": "hyp1ntg6wiumnm0qx71",
+        "text": "Sponsored / Featured Study Logic"
       }
     ],
     "risks": [
@@ -168,14 +168,14 @@
         "id": "1xy18f2prnaimnl6p167",
         "text": "Low engagement",
         "severity": "high",
-        "mitigation": "Integrate new features to improve onboarding and overall user experience.",
+        "mitigation": "Onboarding flow redesign scoped for May; AI Assistant tooltip prompts shipping week of Apr 20; target 30% activation rate by end of Q2",
         "owner": "Product"
       },
       {
         "id": "97qys2ciee8mnlzun14",
         "text": "Delivery delays from workflow changes",
         "severity": "high",
-        "mitigation": "Stabilize processes, prioritize core features",
+        "mitigation": "Daily team sync reinstated scope frozen backlog items deprioritized to protect core delivery",
         "owner": "Engineering"
       },
       {
