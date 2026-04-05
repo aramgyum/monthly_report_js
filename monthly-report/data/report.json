@@ -1,6 +1,6 @@
 {
   "2026-03": {
-    "executiveSummary": "Abcd",
+    "executiveSummary": "WeTrials continued progressing toward its vision of an AI-driven platform, with the AI Assistant and Medical Analyzer emerging as core product differentiators shaping both user experience and long-term positioning.\n\nUser activity shows early positive signals, with increased requests and registrations; however, overall engagement remains low, indicating a need to improve activation, onboarding, and user experience.\n\nDelivery timelines remain under pressure due to the adoption of new AI-driven workflows and dependencies across teams. These constraints are expected to stabilize as processes mature.\n\nPartner collaboration (BCC, ABTA) continues to validate product direction and future opportunities, though impact remains dependent on execution readiness and delivery consistency.\n\nEnabling focus on FY2026 initiatives and continued product development.",
     "kpis": [
       {
         "id": "0ygluempjtnmnl3e68x",
@@ -40,14 +40,49 @@
         "direction": "positive"
       },
       {
+        "id": "ihryp7rsd5mnl8ff1r",
+        "title": "Insight — Delivery Delays Driven by Cross-Team Misalignment",
+        "summary": "Delivery timelines are being impacted not only by the adoption of new AI-driven workflows, but also by misalignment and communication gaps between Platform and Product teams, affecting coordination and execution efficiency.",
+        "impact": "high",
+        "direction": "negative"
+      },
+      {
         "id": "ph0qq4x7tvmnl726yd",
         "title": "Early Growth but Weak Engagement Conversion",
         "summary": "User requests increased (73 → 91), but low weekly active usage indicates friction in converting users into meaningful engagement.",
         "impact": "high",
         "direction": "neutral"
+      },
+      {
+        "id": "mjxvy0wkwzkmnl8bjln",
+        "title": "Partner Validation Strong, Execution Dependent",
+        "summary": "Ongoing collaboration with BCC and ABTA confirms strategic direction, but impact depends on execution readiness and delivery timelines.",
+        "impact": "medium",
+        "direction": "neutral"
+      },
+      {
+        "id": "k8h22vojifmnl8cbwf",
+        "title": "Content & Data Operations Limiting Scale",
+        "summary": "Manual validation and content workflows are slowing scalability, indicating a need for automation or improved operational processes.",
+        "impact": "medium",
+        "direction": "negative"
       }
     ],
     "delivery": [
+      {
+        "id": "vplndr50gjkmnl872e4",
+        "title": "Vide Content Integartion to Learning Center ",
+        "status": "done",
+        "priority": "highest",
+        "notes": ""
+      },
+      {
+        "id": "1rf0e8ysw7emnl885na",
+        "title": "SEO Enhancments Integration for indexing - Web App ",
+        "status": "done",
+        "priority": "highest",
+        "notes": ""
+      },
       {
         "id": "gkwqwo3xojlmnl6omlf",
         "title": "AI Assistant (Chatbot)",
@@ -67,18 +102,25 @@
         "title": "Enrollment Tracking Dashboard",
         "status": "in-progress",
         "priority": "high",
-        "notes": ""
+        "notes": "Early version developed and presented to BCC; further data integration and refinement ongoing."
       },
       {
         "id": "td9ov5nq98mnl77dfb",
-        "title": "Enhancment Sponsoered Study Logic",
+        "title": "Sponsored / Featured Study Logic",
         "status": "in-progress",
         "priority": "medium",
-        "notes": ""
+        "notes": "Enhancement of sponsored study rotation logic to support visibility and future monetization. Planned Presentation to ABTA April 17, 2026"
       },
       {
         "id": "xnzchktlx5dmnl782vm",
-        "title": "Ongoing Enhancments based ion partner and users feedabck",
+        "title": "Platform Enhancements (UX & Stability)",
+        "status": "in-progress",
+        "priority": "medium",
+        "notes": "Ongoing improvements based on partner feedback and early user interaction data."
+      },
+      {
+        "id": "tkuy6xfzmjmnl8a9w3",
+        "title": "Integration New Strudies - Pediatric Cancer ",
         "status": "in-progress",
         "priority": "medium",
         "notes": ""
@@ -91,23 +133,23 @@
         "milestone": "New Sposored Studiesi in profgress",
         "status": "in-progress",
         "priority": "medium",
-        "note": "JNorthwell  - 16\nBlackdimond Pharmatetical - 1\nOno Pharmathectical - 1\nAlphesu medical  - 1"
+        "note": "New studies added (e.g., Ono Pharmaceutical, Alpheus Medical); ongoing collaboration and content updates."
       },
       {
         "id": "irp3dmhfi38mnl7agpo",
         "partner": "BCC",
-        "milestone": "Progressing with Collaboration eraly presentation of Enrollment rtrackig dashbord",
+        "milestone": "Enrollment Dashboard & Collaboration Progress",
         "status": "in-progress",
         "priority": "medium",
-        "note": "During the anyal meeting BVcc Presented Enrollment tracking dashboard on March 16 .WeTrials did prestnation to BCC recivening positicvve feednback"
+        "note": "Enrollment Tracking Dashboard presented at annual meeting; positive feedback received."
       },
       {
         "id": "k5pne0ldxj8mnl7dpor",
         "partner": "BCC",
-        "milestone": "Go-live plan communciated to BCC ...",
+        "milestone": "Study Finder Go-Live Planning",
         "status": "in-progress",
         "priority": "medium",
-        "note": ""
+        "note": "Go-live plan communicated; timeline dependent on video integration and final validation."
       }
     ],
     "comingMonthItems": [
@@ -154,7 +196,7 @@
         "items": [
           {
             "id": "joog7y012umnl7k7x4",
-            "text": "---",
+            "text": "Prepa woark for SR&DS submission FY2026",
             "status": "in-progress"
           }
         ]
@@ -163,7 +205,13 @@
         "id": "bprr35bba64mnl7knc3",
         "title": "AI Caregiveer Challenge",
         "description": "",
-        "items": []
+        "items": [
+          {
+            "id": "34b2xuy4cq7mnl8hjx7",
+            "text": "Prep fork for ",
+            "status": "in-progress"
+          }
+        ]
       }
     ]
   }
