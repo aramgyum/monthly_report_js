@@ -89,16 +89,30 @@ const cfgOpts = (cfg) => Object.entries(cfg).map(([v, c]) => ({ value: v, label:
 
 // ─── Base primitives ─────────────────────────────────────────────────────────
 
-function TA({ editMode, className, ...p }) {
+function TA({ editMode, className, value, placeholder, onChange, rows }) {
+  if (!editMode) {
+    return (
+      <div className={cn(
+        "w-full text-gray-800 leading-relaxed whitespace-pre-wrap break-words overflow-wrap-anywhere",
+        className
+      )}>
+        {value || <span className="text-gray-400">{placeholder}</span>}
+      </div>
+    );
+  }
   return (
-    <textarea readOnly={!editMode} className={cn(
-      "w-full text-gray-800 placeholder:text-gray-400 focus:outline-none transition-colors leading-relaxed",
-      "whitespace-pre-wrap break-words overflow-wrap-anywhere",
-      editMode
-        ? "border border-gray-200 rounded-xl px-3.5 py-2.5 bg-white focus:border-blue-400 focus:ring-1 focus:ring-blue-100 resize-y"
-        : "border-transparent bg-transparent resize-none overflow-hidden",
-      className
-    )} {...p} />
+    <textarea
+      value={value}
+      placeholder={placeholder}
+      onChange={onChange}
+      rows={rows}
+      className={cn(
+        "w-full text-gray-800 placeholder:text-gray-400 focus:outline-none transition-colors leading-relaxed",
+        "whitespace-pre-wrap break-words",
+        "border border-gray-200 rounded-xl px-3.5 py-2.5 bg-white focus:border-blue-400 focus:ring-1 focus:ring-blue-100 resize-y",
+        className
+      )}
+    />
   );
 }
 
@@ -707,9 +721,10 @@ export default function Dashboard() {
                 <span className="w-5 flex-shrink-0" />
                 <div className="flex-1 flex items-center justify-between">
                   <FieldLabel title="Initiative or feature being delivered">Initiative / Feature</FieldLabel>
-                  <div className="flex items-center gap-6">
-                    <FieldLabel title="Importance level">Priority</FieldLabel>
-                    <FieldLabel title="Delivery status">Status</FieldLabel>
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-[90px] flex justify-center"><FieldLabel>Priority</FieldLabel></div>
+                    <div className="w-[110px] flex justify-center"><FieldLabel>Status</FieldLabel></div>
+                    {editMode && <span className="w-[23px]" />}
                   </div>
                 </div>
               </div>
@@ -739,12 +754,16 @@ export default function Dashboard() {
                                   placeholder="Initiative or feature name…" rows={1}
                                   className="flex-1 text-lg font-semibold text-gray-900" />
                                 <div className="flex items-center gap-2.5 flex-shrink-0">
-                                  <SS value={item.priority} onChange={v => secUpd("delivery", idx, "priority", v)}
-                                    options={cfgOpts(PRIORITY_CONFIG)} cfg={PRIORITY_CONFIG} editMode={editMode} />
-                                  <SS value={item.status} onChange={v => secUpd("delivery", idx, "status", v)}
-                                    options={cfgOpts(STATUS_CONFIG)} cfg={STATUS_CONFIG} editMode={editMode} />
+                                  <div className="w-[90px] flex justify-center">
+                                    <SS value={item.priority} onChange={v => secUpd("delivery", idx, "priority", v)}
+                                      options={cfgOpts(PRIORITY_CONFIG)} cfg={PRIORITY_CONFIG} editMode={editMode} />
+                                  </div>
+                                  <div className="w-[110px] flex justify-center">
+                                    <SS value={item.status} onChange={v => secUpd("delivery", idx, "status", v)}
+                                      options={cfgOpts(STATUS_CONFIG)} cfg={STATUS_CONFIG} editMode={editMode} />
+                                  </div>
                                   {editMode && (
-                                    <button onClick={() => secDel("delivery", idx)} className="text-gray-400 hover:text-red-400 transition-colors">
+                                    <button onClick={() => secDel("delivery", idx)} className="text-gray-400 hover:text-red-400 transition-colors w-[23px]">
                                       <X size={15} />
                                     </button>
                                   )}
@@ -785,9 +804,10 @@ export default function Dashboard() {
                     <span className="text-gray-300">·</span>
                     <FieldLabel title="What was achieved">Milestone / Achievement</FieldLabel>
                   </div>
-                  <div className="flex items-center gap-6">
-                    <FieldLabel title="Milestone status">Status</FieldLabel>
-                    <FieldLabel title="Importance level">Priority</FieldLabel>
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-[110px] flex justify-center"><FieldLabel>Status</FieldLabel></div>
+                    <div className="w-[90px] flex justify-center"><FieldLabel>Priority</FieldLabel></div>
+                    {editMode && <span className="w-[23px]" />}
                   </div>
                 </div>
               </div>
@@ -825,12 +845,16 @@ export default function Dashboard() {
                                   )}
                                 </div>
                                 <div className="flex items-center gap-2.5 flex-shrink-0">
-                                  <SS value={item.status} onChange={v => secUpd("partnerMilestones", idx, "status", v)}
-                                    options={cfgOpts(MILESTONE_STATUS_CONFIG)} cfg={MILESTONE_STATUS_CONFIG} editMode={editMode} />
-                                  <SS value={item.priority ?? "medium"} onChange={v => secUpd("partnerMilestones", idx, "priority", v)}
-                                    options={cfgOpts(PRIORITY_CONFIG)} cfg={PRIORITY_CONFIG} editMode={editMode} />
+                                  <div className="w-[110px] flex justify-center">
+                                    <SS value={item.status} onChange={v => secUpd("partnerMilestones", idx, "status", v)}
+                                      options={cfgOpts(MILESTONE_STATUS_CONFIG)} cfg={MILESTONE_STATUS_CONFIG} editMode={editMode} />
+                                  </div>
+                                  <div className="w-[90px] flex justify-center">
+                                    <SS value={item.priority ?? "medium"} onChange={v => secUpd("partnerMilestones", idx, "priority", v)}
+                                      options={cfgOpts(PRIORITY_CONFIG)} cfg={PRIORITY_CONFIG} editMode={editMode} />
+                                  </div>
                                   {editMode && (
-                                    <button onClick={() => secDel("partnerMilestones", idx)} className="text-gray-400 hover:text-red-400 transition-colors">
+                                    <button onClick={() => secDel("partnerMilestones", idx)} className="text-gray-400 hover:text-red-400 transition-colors w-[23px]">
                                       <X size={15} />
                                     </button>
                                   )}
@@ -905,8 +929,31 @@ export default function Dashboard() {
           </Card>
         </SectionWrap>
 
-        {/* ── 07 RISKS & CONSTRAINTS ────────────────────────────────────────── */}
-        <SectionWrap number={7} title="Risks & Constraints" icon={AlertTriangle}
+        {/* ── 07 OTHER PROJECTS ─────────────────────────────────────────────── */}
+        <SectionWrap number={7} title="Other Projects" icon={Folder}
+          onAdd={editMode ? () => setData(d => ({ ...d, customModules: [...(d.customModules || []), makeCustomModule()] })) : null}
+          addLabel="Add module">
+          {(data.customModules?.length === 0 || !data.customModules) && !editMode ? (
+            <Card>
+              <div className="px-6 py-12 text-base text-gray-400 text-center">No other projects recorded.</div>
+            </Card>
+          ) : (
+            <div className="space-y-4">
+              {data.customModules?.map((mod, i) => (
+                <CustomModBlock key={mod.id} mod={mod} editMode={editMode}
+                  onUpdate={(k, v) => modUpd(i, k, v)}
+                  onDelete={() => modDel(i)}
+                  onAddItem={() => modItemAdd(i)}
+                  onDeleteItem={j => modItemDel(i, j)}
+                  onUpdateItem={(j, k, v) => modItemUpd(i, j, k, v)}
+                  onReorderItems={next => modItemReorder(i, next)} />
+              ))}
+            </div>
+          )}
+        </SectionWrap>
+
+        {/* ── 08 RISKS & CONSTRAINTS ────────────────────────────────────────── */}
+        <SectionWrap number={8} title="Risks & Constraints" icon={AlertTriangle}
           onAdd={editMode ? () => secAdd("risks", makeRisk) : null}
           addLabel="Add risk">
           <Card>
@@ -970,25 +1017,6 @@ export default function Dashboard() {
             </DragDropContext>
           </Card>
         </SectionWrap>
-
-        {/* ── CUSTOM MODULES ────────────────────────────────────────────────── */}
-        {data.customModules?.map((mod, i) => (
-          <CustomModBlock key={mod.id} mod={mod} editMode={editMode}
-            onUpdate={(k, v) => modUpd(i, k, v)}
-            onDelete={() => modDel(i)}
-            onAddItem={() => modItemAdd(i)}
-            onDeleteItem={j => modItemDel(i, j)}
-            onUpdateItem={(j, k, v) => modItemUpd(i, j, k, v)}
-            onReorderItems={next => modItemReorder(i, next)} />
-        ))}
-
-        {editMode && (
-          <button
-            onClick={() => setData(d => ({ ...d, customModules: [...(d.customModules || []), makeCustomModule()] }))}
-            className="no-print w-full inline-flex items-center justify-center gap-2.5 text-base font-semibold text-gray-400 hover:text-gray-700 border-2 border-dashed border-gray-200 rounded-2xl px-8 py-6 hover:border-gray-400 hover:bg-gray-50 transition-colors">
-            <Plus size={18} /> Add Custom Module
-          </button>
-        )}
 
         {/* Footer */}
         <p className="text-center text-sm text-gray-300 pb-4 no-print">
