@@ -136,9 +136,9 @@
       {
         "id": "tkuy6xfzmjmnl8a9w3",
         "title": "Integration New Strudies - Pediatric Cancer ",
-        "status": "in-progress",
-        "priority": "medium",
-        "notes": ""
+        "status": "done",
+        "priority": "low",
+        "notes": "Integrated 800+ studies for pediatrc cancer patient resirece moduel "
       }
     ],
     "partnerMilestones": [
