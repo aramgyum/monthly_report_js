@@ -34,19 +34,26 @@
     "insights": [
       {
         "id": "40kf34b0h87mnl3fmah",
-        "title": "",
-        "summary": "",
-        "impact": "medium",
+        "title": "AI Capabilities Driving Product Positioning",
+        "summary": "AI Assistant and Medical Analyzer are emerging as core differentiators, shaping both experience and strategic positioning.",
+        "impact": "high",
+        "direction": "positive"
+      },
+      {
+        "id": "ph0qq4x7tvmnl726yd",
+        "title": "Early Growth but Weak Engagement Conversion",
+        "summary": "User requests increased (73 → 91), but low weekly active usage indicates friction in converting users into meaningful engagement.",
+        "impact": "high",
         "direction": "neutral"
       }
     ],
     "delivery": [
       {
         "id": "gkwqwo3xojlmnl6omlf",
-        "title": "11",
+        "title": "AI Assistant (Chatbot)",
         "status": "in-progress",
-        "priority": "medium",
-        "notes": "1111"
+        "priority": "highest",
+        "notes": "Early delivery in progress for validate engagement evaluation and move with  with planned improvements."
       }
     ],
     "partnerMilestones": [
