@@ -78,7 +78,7 @@
       },
       {
         "id": "xnzchktlx5dmnl782vm",
-        "title": "",
+        "title": "Ongoing Enhancments based ion partner and users feedabck",
         "status": "in-progress",
         "priority": "medium",
         "notes": ""
@@ -87,17 +87,53 @@
     "partnerMilestones": [
       {
         "id": "nsx9o6s1pdmnl6oudz",
-        "partner": "11111",
-        "milestone": "1111",
+        "partner": "ABTA",
+        "milestone": "New Sposored Studiesi in profgress",
         "status": "in-progress",
         "priority": "medium",
-        "note": "11111"
+        "note": "JNorthwell  - 16\nBlackdimond Pharmatetical - 1\nOno Pharmathectical - 1\nAlphesu medical  - 1"
+      },
+      {
+        "id": "irp3dmhfi38mnl7agpo",
+        "partner": "BCC",
+        "milestone": "Progressing with Collaboration eraly presentation of Enrollment rtrackig dashbord",
+        "status": "in-progress",
+        "priority": "medium",
+        "note": "During the anyal meeting BVcc Presented Enrollment tracking dashboard on March 16 .WeTrials did prestnation to BCC recivening positicvve feednback"
+      },
+      {
+        "id": "k5pne0ldxj8mnl7dpor",
+        "partner": "BCC",
+        "milestone": "Go-live plan communciated to BCC ...",
+        "status": "in-progress",
+        "priority": "medium",
+        "note": ""
       }
     ],
     "comingMonthItems": [
       {
+        "id": "3zsuh6aiupwmnl7hrjh",
+        "text": "Recomandation Syutme Integration"
+      },
+      {
+        "id": "29onaxxnhiymnl7h82j",
+        "text": "Media and Video Integratton to Study Details "
+      },
+      {
         "id": "tf5pkpxli7gmnl6oz82",
-        "text": "1111111"
+        "text": "COmtimue Integration of Ai Assitant"
+      },
+      {
+        "id": "igx2fn3bbimnl7fwuh",
+        "text": "COmtimue Integration of Ai Analizer"
+      },
+      {
+        "id": "865gpbhurvvmnl7g7ft",
+        "text": "Continue enahanc,emt and developemnt Enrollment TRacking dashbord BCC"
+      },
+      {
+        "id": "t0u91zt3ehmnl7gqwd",
+        "text": "Integrate new planned enhamsment"
       }
     ],
     "risks": [
@@ -112,13 +148,13 @@
     "partners": [],
     "customModules": [
       {
-        "id": "cezce8jvixhmnl6p3fn",
-        "title": "New Module",
+        "id": "lumunkclanmnl7jrun",
+        "title": "SR&ED Submission 2026",
         "description": "",
         "items": [
           {
-            "id": "sqnxwbnhfm8mnl6p4n2",
-            "text": "111111",
+            "id": "joog7y012umnl7k7x4",
+            "text": "---",
             "status": "in-progress"
           }
         ]
