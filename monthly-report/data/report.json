@@ -80,7 +80,7 @@
         "title": "AI Platform Development",
         "status": "in-progress",
         "priority": "highest",
-        "notes": "AI Assistant (Chatbot) - Accessible without registration, guiding users across Study Finder, Learning Center, and Support Programs to improve discovery and initial engagement.\n\nAI Medical Analyzer - Processes and summarizes user medical documents into structured reports. Early engagement is promising, though the email submission flow creates some drop-off while contributing to user registration and consent capture.\n\nEarly delivery underway to validate user engagement and guide next-phase improvements, with expected impact on product usage."
+        "notes": "AI Assistant (Chatbot) – Accessible without registration, guiding users across Study Finder, Learning Center, and Support Programs to improve discovery and initial engagement.\n\nAI Medical Analyzer – Processes and summarizes user medical documents into structured reports. Early engagement is promising, though the email-based flow introduces some drop-off while supporting registration and consent capture.\n\nOverall: Early delivery is underway to validate engagement and guide next-phase improvements, with expected impact on product usage."
       },
       {
         "id": "vplndr50gjkmnl872e4",
