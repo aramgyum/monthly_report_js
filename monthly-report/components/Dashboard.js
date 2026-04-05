@@ -628,18 +628,7 @@ export default function Dashboard() {
           </div>
 
           <div className="flex items-center gap-2.5 no-print">
-            {/* GitHub connection badge */}
-            {ghConnected === true && (
-              <span className="hidden sm:inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-full px-3 py-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block" /> GitHub
-              </span>
-            )}
-            {ghConnected === false && (
-              <span className="hidden sm:inline-flex items-center gap-1.5 text-xs font-semibold text-amber-700 bg-amber-50 border border-amber-200 rounded-full px-3 py-1.5" title="GitHub not configured — data saved in browser only">
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-500 inline-block" /> Local only
-              </span>
-            )}
-            <button onClick={handleNewReport}
+<button onClick={handleNewReport}
               className="inline-flex items-center gap-2 text-sm font-semibold rounded-xl px-4 py-2.5 border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 transition-colors">
               <Plus size={14} /> New Report
             </button>
