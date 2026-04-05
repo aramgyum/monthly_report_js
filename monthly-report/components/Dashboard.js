@@ -227,41 +227,38 @@ function Card({ className, children }) {
 function InsightRow({ item, editMode, onUpdate, onDelete, provided, snapshot }) {
   return (
     <div ref={provided.innerRef} {...provided.draggableProps}
-      className={cn("item-row flex items-start gap-4 px-6 py-6 group hover:bg-gray-50/60 transition-colors",
+      className={cn("item-row flex items-start gap-4 px-6 py-5 group hover:bg-gray-50/60 transition-colors",
         snapshot.isDragging && "bg-white shadow-lg rounded-2xl")}>
       <DragHandle {...provided.dragHandleProps} />
 
-      {/* Left: title + summary */}
-      <div className="flex-1 min-w-0 space-y-2">
-        <FieldLabel title="Headline finding">Title</FieldLabel>
+      {/* Title + summary */}
+      <div className="flex-1 min-w-0 space-y-1.5">
         <TA editMode={editMode} value={item.title}
           onChange={e => onUpdate("title", e.target.value)}
           placeholder="Insight title…" rows={1}
-          className={cn("text-lg font-semibold text-gray-900",
-            !editMode && "px-0 border-transparent bg-transparent resize-none overflow-hidden")} />
+          className="text-lg font-semibold text-gray-900" />
         <TA editMode={editMode} value={item.summary}
           onChange={e => onUpdate("summary", e.target.value)}
           placeholder="What happened and why it matters…" rows={2}
           className="text-base text-gray-600" />
       </div>
 
-      {/* Right: Impact + Direction on ONE line */}
-      <div className="flex-shrink-0 flex items-center gap-4 pt-6">
-        <div className="flex flex-col items-end gap-1.5">
-          <FieldLabel title="Business importance">Impact</FieldLabel>
-          <SS value={item.impact} onChange={v => onUpdate("impact", v)}
-            options={cfgOpts(IMPACT_CONFIG)} cfg={IMPACT_CONFIG} editMode={editMode} />
-        </div>
-        <div className="flex flex-col items-end gap-1.5">
-          <FieldLabel title="Trend direction">Direction</FieldLabel>
-          <DirToggle value={item.direction} onChange={v => onUpdate("direction", v)} editMode={editMode} />
-        </div>
-        {editMode && (
-          <button onClick={onDelete} className="text-gray-400 hover:text-red-400 transition-colors p-1 self-center mt-4">
-            <X size={15} />
-          </button>
-        )}
+      {/* Impact badge — fixed width to align with header */}
+      <div className="w-[90px] flex-shrink-0 flex justify-start pt-1">
+        <SS value={item.impact} onChange={v => onUpdate("impact", v)}
+          options={cfgOpts(IMPACT_CONFIG)} cfg={IMPACT_CONFIG} editMode={editMode} />
       </div>
+
+      {/* Direction badge — fixed width to align with header */}
+      <div className="w-[130px] flex-shrink-0 flex justify-start pt-1">
+        <DirToggle value={item.direction} onChange={v => onUpdate("direction", v)} editMode={editMode} />
+      </div>
+
+      {editMode && (
+        <button onClick={onDelete} className="text-gray-400 hover:text-red-400 transition-colors flex-shrink-0 pt-1">
+          <X size={15} />
+        </button>
+      )}
     </div>
   );
 }
@@ -269,6 +266,16 @@ function InsightRow({ item, editMode, onUpdate, onDelete, provided, snapshot }) 
 function InsightList({ id, items, editMode, onUpdate, onDelete, onReorder }) {
   return (
     <Card>
+      {/* Single header row — labels shown once */}
+      {items.length > 0 && (
+        <div className="flex items-center gap-4 px-6 pt-5 pb-3 border-b border-gray-100">
+          <span className="w-5 flex-shrink-0" />
+          <div className="flex-1"><FieldLabel>Insight</FieldLabel></div>
+          <div className="w-[90px] flex-shrink-0"><FieldLabel>Impact</FieldLabel></div>
+          <div className="w-[130px] flex-shrink-0"><FieldLabel>Direction</FieldLabel></div>
+          {editMode && <span className="w-[23px]" />}
+        </div>
+      )}
       <DragDropContext onDragEnd={r => r.destination && onReorder(reorder(items, r.source.index, r.destination.index))}>
         <Droppable droppableId={id}>
           {(prov, snap) => (
