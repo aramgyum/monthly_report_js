@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-const PATH = "data/report.json";
+const PATH = "monthly-report/data/report.json";
 
 function ghHeaders() {
   return {
