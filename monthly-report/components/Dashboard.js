@@ -147,35 +147,32 @@ function SS({ value, onChange, options, cfg, editMode, className }) {
   );
 }
 
-// Direction indicator — one badge in read mode, three labeled buttons in edit mode
+// Direction indicator — one badge in read mode, dropdown select in edit mode
 function DirToggle({ value, onChange, editMode }) {
   const opts = [
-    { v: "positive", label: "↑ Improving", active: "bg-emerald-50 text-emerald-700 border-emerald-200", idle: "bg-white text-gray-400 border-gray-200 hover:bg-gray-50" },
-    { v: "neutral",  label: "→ Stable",    active: "bg-gray-100 text-gray-600 border-gray-300",         idle: "bg-white text-gray-400 border-gray-200 hover:bg-gray-50" },
-    { v: "negative", label: "↓ Declining", active: "bg-red-50 text-red-600 border-red-200",             idle: "bg-white text-gray-400 border-gray-200 hover:bg-gray-50" },
+    { v: "positive", label: "↑ Improving", cls: "bg-emerald-50 text-emerald-700 border-emerald-200" },
+    { v: "neutral",  label: "→ Stable",    cls: "bg-gray-100 text-gray-600 border-gray-300"         },
+    { v: "negative", label: "↓ Declining", cls: "bg-red-50 text-red-600 border-red-200"             },
   ];
   const current = opts.find(o => o.v === value) || opts[1];
 
   if (!editMode) {
-    // Read mode: single badge showing arrow + text
     return (
-      <span className={cn("inline-flex items-center rounded-full border px-3.5 py-1.5 text-sm font-semibold whitespace-nowrap leading-none", current.active)}>
+      <span className={cn("inline-flex items-center rounded-full border px-3.5 py-1.5 text-sm font-semibold whitespace-nowrap leading-none", current.cls)}>
         {current.label}
       </span>
     );
   }
 
-  // Edit mode: three labeled buttons
   return (
-    <div className="inline-flex gap-1.5 flex-shrink-0 flex-wrap">
-      {opts.map(o => (
-        <button key={o.v} onClick={() => onChange(o.v)}
-          className={cn("inline-flex items-center rounded-full border px-3 py-1.5 text-sm font-semibold transition-colors leading-none",
-            value === o.v ? o.active : o.idle)}>
-          {o.label}
-        </button>
-      ))}
-    </div>
+    <select value={value} onChange={e => onChange(e.target.value)}
+      className={cn(
+        "inline-flex rounded-full border px-3.5 py-1.5 text-sm font-semibold focus:outline-none cursor-pointer",
+        "transition-colors appearance-none whitespace-nowrap leading-none",
+        current.cls
+      )}>
+      {opts.map(o => <option key={o.v} value={o.v}>{o.label}</option>)}
+    </select>
   );
 }
 
