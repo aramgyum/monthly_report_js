@@ -1,1 +1,50 @@
-{}
+{
+  "2026-03": {
+    "executiveSummary": "Abcd",
+    "kpis": [
+      {
+        "id": "0ygluempjtnmnl3e68x",
+        "label": "Total Users",
+        "value": "501",
+        "prevValue": "",
+        "sub": "Registered"
+      },
+      {
+        "id": "ukazqax70oimnl3e68x",
+        "label": "User Requests",
+        "value": "556",
+        "prevValue": "",
+        "sub": "All time"
+      },
+      {
+        "id": "rg4vnc26wkamnl3e68x",
+        "label": "Total Studies",
+        "value": "",
+        "prevValue": "",
+        "sub": "Study DB"
+      },
+      {
+        "id": "nk5hx3le58hmnl3e68x",
+        "label": "Active Partners",
+        "value": "",
+        "prevValue": "",
+        "sub": "With updates"
+      }
+    ],
+    "insights": [
+      {
+        "id": "40kf34b0h87mnl3fmah",
+        "title": "",
+        "summary": "",
+        "impact": "medium",
+        "direction": "neutral"
+      }
+    ],
+    "delivery": [],
+    "partnerMilestones": [],
+    "comingMonthItems": [],
+    "risks": [],
+    "partners": [],
+    "customModules": []
+  }
+}
