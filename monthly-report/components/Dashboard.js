@@ -23,8 +23,8 @@ import {
 
 // ─── Storage ─────────────────────────────────────────────────────────────────
 const LS_KEY = "wetrials-monthly-v5";
+function lsLoad() { try { return JSON.parse(localStorage.getItem(LS_KEY) || "{}"); } catch { return {}; } }
 function lsSave(store) { try { localStorage.setItem(LS_KEY, JSON.stringify(store)); } catch {} }
-function lsClear()     { try { localStorage.removeItem(LS_KEY); } catch {} }
 
 // ─── Logo ─────────────────────────────────────────────────────────────────────
 function WeLogo({ size = 44 }) {
@@ -469,7 +469,8 @@ export default function Dashboard() {
   const [data, setData]             = useState(null);
   const [store, setStore]           = useState({});
   const [storeReady, setStoreReady] = useState(false);
-  const [saveState, setSaveState]   = useState("idle");     // idle|saving|saved|error
+  const [saveState, setSaveState]   = useState("idle");     // idle|saving|saved|local|error
+  const [ghConnected, setGhConnected] = useState(null);    // null=unknown, true, false
   const [loadErr, setLoadErr]       = useState(null);
 
   // Auth
@@ -477,22 +478,29 @@ export default function Dashboard() {
     if (sessionStorage.getItem("auth") === "1") setAuthed(true);
   }, []);
 
-  // ── On mount: clear localStorage, load ONLY from GitHub JSON ───────────────
+  // ── On mount: try GitHub first, fall back to localStorage ─────────────────
   useEffect(() => {
     async function bootstrap() {
-      // Always clear any stale browser cache
-      lsClear();
-
       let loaded = {};
+      let usedGitHub = false;
+
       try {
         const res  = await fetch("/api/load");
         const json = await res.json();
-        if (json.data && typeof json.data === "object" && !Array.isArray(json.data)) {
+        setGhConnected(!!json.configured);
+        if (json.configured && json.data && typeof json.data === "object" && Object.keys(json.data).length > 0) {
           loaded = json.data;
+          usedGitHub = true;
         }
-        // If json.data is null/empty, loaded stays {} (fresh start)
-      } catch (e) {
-        setLoadErr("Could not reach GitHub storage — starting fresh.");
+      } catch {
+        setGhConnected(false);
+        setLoadErr("Could not reach GitHub — using local data.");
+      }
+
+      // If GitHub had no data (not configured, or empty file), fall back to localStorage
+      if (!usedGitHub) {
+        const ls = lsLoad();
+        if (Object.keys(ls).length > 0) loaded = ls;
       }
 
       setStore(loaded);
@@ -504,7 +512,7 @@ export default function Dashboard() {
         setYear(parseInt(y, 10));
         setMonth(parseInt(m, 10) - 1);
       }
-      // else: keep the defaults (March 2025 set in useState)
+      // else: keep defaults (March 2025)
 
       setStoreReady(true);
     }
@@ -530,12 +538,12 @@ export default function Dashboard() {
   }
   function handleAuth() { setAuthed(true); setShowModal(false); setEditMode(true); }
 
-  // ── Save: GitHub primary, localStorage backup, then switch to read mode ────
+  // ── Save: always write localStorage, try GitHub, show clear status ────────
   async function save() {
     setSaveState("saving");
     const updated = { ...store, [monthKey(month, year)]: data };
     setStore(updated);
-    lsSave(updated); // backup only
+    lsSave(updated); // always persist locally first
 
     try {
       const res = await fetch("/api/save", {
@@ -543,14 +551,23 @@ export default function Dashboard() {
         headers: { "Content-Type": "application/json" },
         body:    JSON.stringify(updated),
       });
-      // 501 = GitHub env vars not set; localStorage backup is there
-      if (!res.ok && res.status !== 501) throw new Error("GitHub save failed");
-      setSaveState("saved");
-      setEditMode(false); // switch to preview/read mode
+
+      if (res.status === 501) {
+        // GitHub env vars not configured — data is safe in localStorage
+        setGhConnected(false);
+        setSaveState("local");
+      } else if (!res.ok) {
+        throw new Error("GitHub save failed");
+      } else {
+        setGhConnected(true);
+        setSaveState("saved");
+      }
+      setEditMode(false); // switch to read/preview mode either way
     } catch {
       setSaveState("error");
+      setEditMode(false);
     }
-    setTimeout(() => setSaveState("idle"), 3000);
+    setTimeout(() => setSaveState("idle"), 3500);
   }
 
   // ── New Report: go to (today − 1 month) ───────────────────────────────────
@@ -611,6 +628,17 @@ export default function Dashboard() {
           </div>
 
           <div className="flex items-center gap-2.5 no-print">
+            {/* GitHub connection badge */}
+            {ghConnected === true && (
+              <span className="hidden sm:inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-full px-3 py-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block" /> GitHub
+              </span>
+            )}
+            {ghConnected === false && (
+              <span className="hidden sm:inline-flex items-center gap-1.5 text-xs font-semibold text-amber-700 bg-amber-50 border border-amber-200 rounded-full px-3 py-1.5" title="GitHub not configured — data saved in browser only">
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-500 inline-block" /> Local only
+              </span>
+            )}
             <button onClick={handleNewReport}
               className="inline-flex items-center gap-2 text-sm font-semibold rounded-xl px-4 py-2.5 border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 transition-colors">
               <Plus size={14} /> New Report
@@ -618,12 +646,14 @@ export default function Dashboard() {
             <button onClick={save} disabled={saveState === "saving"}
               className={cn("inline-flex items-center gap-2 text-sm font-semibold rounded-xl px-5 py-2.5 transition-colors",
                 saveState === "saving" ? "bg-gray-300 text-white cursor-not-allowed"
-                : saveState === "saved"   ? "bg-emerald-600 text-white"
-                : saveState === "error"   ? "bg-red-500 text-white"
+                : saveState === "saved"  ? "bg-emerald-600 text-white"
+                : saveState === "local"  ? "bg-amber-500 text-white"
+                : saveState === "error"  ? "bg-red-500 text-white"
                 : "bg-gray-900 hover:bg-gray-800 text-white")}>
               {saveState === "saving" ? "Saving…"
-                : saveState === "saved" ? <><Check size={15} /> Saved</>
-                : saveState === "error" ? "Save failed"
+                : saveState === "saved"  ? <><Check size={15} /> Saved to GitHub</>
+                : saveState === "local"  ? <><Check size={15} /> Saved locally</>
+                : saveState === "error"  ? "Save failed — retry"
                 : <><Save size={15} /> Save</>}
             </button>
             <button onClick={handleEditClick}
