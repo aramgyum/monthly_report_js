@@ -1,6 +1,6 @@
 {
   "2026-03": {
-    "executiveSummary": "WeTrials continued progressing toward its vision of an AI-driven platform, with the AI Assistant and Medical Analyzer emerging as core product differentiators shaping both user experience and long-term positioning.\n\nUser activity shows early positive signals, with increased requests and registrations; however, overall engagement remains low, indicating a need to improve activation, onboarding, and user experience.\n\nDelivery timelines remain under pressure due to the adoption of new AI-driven workflows and dependencies across teams. These constraints are expected to stabilize as processes mature.\n\nPartner collaboration (BCC, ABTA) continues to validate product direction and future opportunities, though impact remains dependent on execution readiness and delivery consistency.\n\nEnabling focus on FY2026 initiatives and continued product development.",
+    "executiveSummary": "Product Team is making progress on AI-driven capabilities, with the AI Assistant and Medical Analyzer emerging as core differentiators; however, user engagement remains the primary gap requiring immediate focus.\n\nOver the past month, the platform continued advancing toward its AI-driven vision, with meaningful progress across core product capabilities and partner initiatives.\n\nUser activity shows early positive signals, including growth in registrations and requests. However, engagement depth remains low, indicating friction in activation, onboarding, and overall user experience.\n\nDelivery timelines remain under pressure due to the adoption of new AI-driven workflows and cross-team dependencies. These challenges are expected to stabilize as processes mature.\n\nStrategic collaboration with partners (BCC, ABTA) continues to validate product direction and long-term opportunity, though impact remains dependent on execution consistency.\n\nThe SR&ED FY2025 cycle has been successfully completed, enabling focus on FY2026 initiatives and continued product development.\n\nPartner collaboration (BCC, ABTA) continues to validate product direction and future opportunities, though impact remains dependent on execution readiness and delivery consistency.",
     "kpis": [
       {
         "id": "0ygluempjtnmnl3e68x",
@@ -55,16 +55,16 @@
         "direction": "positive"
       },
       {
-        "id": "ihryp7rsd5mnl8ff1r",
-        "title": "Insight — Delivery Delays Driven by Cross-Team Misalignment",
-        "summary": "Delivery timelines are being impacted not only by the adoption of new AI-driven workflows, but also by misalignment and communication gaps between Platform and Product teams, affecting coordination and execution efficiency.",
+        "id": "ph0qq4x7tvmnl726yd",
+        "title": "Engagement Gap Between Acquisition and Usage",
+        "summary": "User growth is increasing, but low weekly activity indicates friction in converting users into sustained engagement.",
         "impact": "high",
-        "direction": "negative"
+        "direction": "neutral"
       },
       {
-        "id": "ph0qq4x7tvmnl726yd",
-        "title": "Early Growth but Weak Engagement Conversion",
-        "summary": "User requests increased (73 → 91), but low weekly active usage indicates friction in converting users into meaningful engagement.",
+        "id": "ihryp7rsd5mnl8ff1r",
+        "title": "Delivery Delays Driven by Workflow and Alignment Challenges",
+        "summary": "New AI-driven workflows and cross-team coordination gaps are impacting delivery speed and execution efficiency.",
         "impact": "high",
         "direction": "neutral"
       },
@@ -78,7 +78,7 @@
       {
         "id": "k8h22vojifmnl8cbwf",
         "title": "Content & Data Operations Limiting Scale",
-        "summary": "Manual validation and content workflows are slowing scalability, indicating a need for automation or improved operational processes.",
+        "summary": "Manual validation and content workflows are slowing scalability, highlighting the need for automation and process optimization.",
         "impact": "medium",
         "direction": "negative"
       }
@@ -89,14 +89,14 @@
         "title": "Vide Content Integartion to Learning Center ",
         "status": "done",
         "priority": "highest",
-        "notes": "Video content integration completed, enabling more learning Center publiucation and more euser enagagment and supporting upcoming partner go-live requirements."
+        "notes": "Core capabilities under development; early delivery phase focused on validating engagement and refining functionality."
       },
       {
         "id": "1rf0e8ysw7emnl885na",
         "title": "SEO Enhancments Integration for indexing - Web App ",
         "status": "done",
         "priority": "highest",
-        "notes": ""
+        "notes": "Iterative improvements based on early user signals and partner feedback to support activation and usability."
       },
       {
         "id": "gkwqwo3xojlmnl6omlf",
@@ -117,7 +117,7 @@
         "title": "Enrollment Tracking Dashboard",
         "status": "in-progress",
         "priority": "high",
-        "notes": "Early version developed and presented to BCC; further data integration and refinement ongoing."
+        "notes": "Key features aligned with partner needs; critical for upcoming go-live and collaboration milestones."
       },
       {
         "id": "td9ov5nq98mnl77dfb",
