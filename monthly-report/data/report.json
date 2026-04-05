@@ -112,28 +112,28 @@
     ],
     "comingMonthItems": [
       {
-        "id": "3zsuh6aiupwmnl7hrjh",
-        "text": "Recomandation Syutme Integration"
-      },
-      {
-        "id": "29onaxxnhiymnl7h82j",
-        "text": "Media and Video Integratton to Study Details "
-      },
-      {
         "id": "tf5pkpxli7gmnl6oz82",
-        "text": "COmtimue Integration of Ai Assitant"
+        "text": "Continue development and complete WeTrials AI Assistant"
       },
       {
         "id": "igx2fn3bbimnl7fwuh",
-        "text": "COmtimue Integration of Ai Analizer"
+        "text": "Continue development and complete AI Medical Analyzer"
       },
       {
         "id": "865gpbhurvvmnl7g7ft",
-        "text": "Continue enahanc,emt and developemnt Enrollment TRacking dashbord BCC"
+        "text": "Enhance and expand Enrollment Tracking Dashboard (BCC)"
+      },
+      {
+        "id": "3zsuh6aiupwmnl7hrjh",
+        "text": "Recommendation System Integration (Content Matching)"
+      },
+      {
+        "id": "29onaxxnhiymnl7h82j",
+        "text": "Media and video integration into study details"
       },
       {
         "id": "t0u91zt3ehmnl7gqwd",
-        "text": "Integrate new planned enhamsment"
+        "text": "Implement planned product and UX improvements"
       }
     ],
     "risks": [
