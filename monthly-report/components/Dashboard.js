@@ -147,20 +147,32 @@ function SS({ value, onChange, options, cfg, editMode, className }) {
   );
 }
 
-// Direction toggle ↑ → ↓
+// Direction indicator — one badge in read mode, three labeled buttons in edit mode
 function DirToggle({ value, onChange, editMode }) {
-  const btns = [
-    { v: "positive", icon: "↑", on: "bg-emerald-50 text-emerald-700 border-emerald-200" },
-    { v: "neutral",  icon: "→", on: "bg-gray-100   text-gray-600   border-gray-300"    },
-    { v: "negative", icon: "↓", on: "bg-red-50     text-red-600    border-red-200"     },
+  const opts = [
+    { v: "positive", label: "↑ Improving", active: "bg-emerald-50 text-emerald-700 border-emerald-200", idle: "bg-white text-gray-400 border-gray-200 hover:bg-gray-50" },
+    { v: "neutral",  label: "→ Stable",    active: "bg-gray-100 text-gray-600 border-gray-300",         idle: "bg-white text-gray-400 border-gray-200 hover:bg-gray-50" },
+    { v: "negative", label: "↓ Declining", active: "bg-red-50 text-red-600 border-red-200",             idle: "bg-white text-gray-400 border-gray-200 hover:bg-gray-50" },
   ];
+  const current = opts.find(o => o.v === value) || opts[1];
+
+  if (!editMode) {
+    // Read mode: single badge showing arrow + text
+    return (
+      <span className={cn("inline-flex items-center rounded-full border px-3.5 py-1.5 text-sm font-semibold whitespace-nowrap leading-none", current.active)}>
+        {current.label}
+      </span>
+    );
+  }
+
+  // Edit mode: three labeled buttons
   return (
-    <div className={cn("inline-flex rounded-full overflow-hidden border border-gray-300 flex-shrink-0", !editMode && "pointer-events-none")}>
-      {btns.map(b => (
-        <button key={b.v} onClick={() => editMode && onChange(b.v)}
-          className={cn("px-3 py-1.5 text-sm font-bold transition-colors leading-none",
-            value === b.v ? b.on : "bg-white text-gray-400 hover:bg-gray-50")}>
-          {b.icon}
+    <div className="inline-flex gap-1.5 flex-shrink-0 flex-wrap">
+      {opts.map(o => (
+        <button key={o.v} onClick={() => onChange(o.v)}
+          className={cn("inline-flex items-center rounded-full border px-3 py-1.5 text-sm font-semibold transition-colors leading-none",
+            value === o.v ? o.active : o.idle)}>
+          {o.label}
         </button>
       ))}
     </div>
