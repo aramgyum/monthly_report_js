@@ -79,14 +79,14 @@
         "id": "ua6urpc8p5mnlzg2nh",
         "title": "AI Platform Development",
         "status": "in-progress",
-        "priority": "medium",
+        "priority": "highest",
         "notes": "AI Assistant (Chatbot) – Early delivery, expected to significantly impact product usage.\nAI Medical Analyzer – Expected to significantly enhance product differentiation and drive user value."
       },
       {
         "id": "vplndr50gjkmnl872e4",
         "title": "Engagement & UX Improvements",
         "status": "done",
-        "priority": "highest",
+        "priority": "high",
         "notes": "Video Content Integration to Learning Center \nSEO Enhancements Integration for indexing - Web App \nPlatform Enhancements (UX & Stability)"
       },
       {
