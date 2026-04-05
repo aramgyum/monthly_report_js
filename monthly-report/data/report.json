@@ -76,32 +76,18 @@
     ],
     "delivery": [
       {
+        "id": "ua6urpc8p5mnlzg2nh",
+        "title": "AI Platform Development",
+        "status": "in-progress",
+        "priority": "medium",
+        "notes": "AI Assistant (Chatbot) - Early delivery in progress for validate engagement evaluation and move with  with improvements Expected to significantly impact product usage\nAI Medical Analyzer - Expected to significantly impact product differentiation and usage"
+      },
+      {
         "id": "vplndr50gjkmnl872e4",
-        "title": "Video Content Integartion to Learning Center ",
+        "title": "Engagement & UX Improvements",
         "status": "done",
         "priority": "highest",
-        "notes": "Core capabilities under development; early delivery phase focused on validating engagement and refining functionality."
-      },
-      {
-        "id": "1rf0e8ysw7emnl885na",
-        "title": "SEO Enhancments Integration for indexing - Web App ",
-        "status": "done",
-        "priority": "highest",
-        "notes": "Iterative improvements based on early user signals and partner feedback to support activation and usability."
-      },
-      {
-        "id": "gkwqwo3xojlmnl6omlf",
-        "title": "AI Assistant (Chatbot)",
-        "status": "in-progress",
-        "priority": "highest",
-        "notes": "Early delivery in progress for validate engagement evaluation and move with  with planned improvements."
-      },
-      {
-        "id": "6ti38ard7somnl75pez",
-        "title": "AI Medical Analyzer",
-        "status": "in-progress",
-        "priority": "high",
-        "notes": "Core capability under development, expected to significantly impact product differentiation."
+        "notes": "Video Content Integration to Learning Center \nSEO Enhancements Integration for indexing - Web App \nPlatform Enhancements (UX & Stability)"
       },
       {
         "id": "dpbxwu8ruh9mnl76e34",
@@ -118,18 +104,11 @@
         "notes": "Enhancement of sponsored study rotation logic to support visibility and future monetization. Planned Presentation to ABTA April 17, 2026"
       },
       {
-        "id": "xnzchktlx5dmnl782vm",
-        "title": "Platform Enhancements (UX & Stability)",
-        "status": "in-progress",
-        "priority": "medium",
-        "notes": "Ongoing improvements based on partner feedback and early user interaction data."
-      },
-      {
         "id": "tkuy6xfzmjmnl8a9w3",
-        "title": "Integration New Studies - Pediatric Cancer ",
+        "title": "Data & Content Expansion",
         "status": "done",
         "priority": "low",
-        "notes": "Integrated 800+ studies for pediatrc cancer patient resirece moduel "
+        "notes": "Integrated 800+ studies for paediatric cancer patient resource module \n"
       }
     ],
     "partnerMilestones": [
