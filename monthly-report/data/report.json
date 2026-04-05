@@ -80,7 +80,7 @@
         "title": "AI Platform Development",
         "status": "in-progress",
         "priority": "medium",
-        "notes": "AI Assistant (Chatbot) - Early delivery in progress for validate engagement evaluation and move with  with improvements Expected to significantly impact product usage\nAI Medical Analyzer - Expected to significantly impact product differentiation and usage"
+        "notes": "AI Assistant (Chatbot) – Early delivery, expected to significantly impact product usage.\nAI Medical Analyzer – Expected to significantly enhance product differentiation and drive user value."
       },
       {
         "id": "vplndr50gjkmnl872e4",
@@ -115,7 +115,7 @@
       {
         "id": "nsx9o6s1pdmnl6oudz",
         "partner": "ABTA",
-        "milestone": "New Sposored Studiesi in profgress",
+        "milestone": "New sponsored studies integration in progress",
         "status": "in-progress",
         "priority": "medium",
         "note": "New studies added (e.g., Ono Pharmaceutical, Alpheus Medical); ongoing collaboration and content updates."
@@ -170,6 +170,20 @@
         "severity": "high",
         "mitigation": "Integrate new features to improve onboarding and overall user experience.",
         "owner": "Product"
+      },
+      {
+        "id": "97qys2ciee8mnlzun14",
+        "text": "Delivery delays from workflow changes",
+        "severity": "high",
+        "mitigation": "Stabilize processes, prioritize core features",
+        "owner": "Engineering"
+      },
+      {
+        "id": "ea6y7sntuyjmnlzvckf",
+        "text": "Cross-team alignment gaps",
+        "severity": "high",
+        "mitigation": "Improve coordination and planning cadence",
+        "owner": "Product / Eng"
       }
     ],
     "partners": [],
