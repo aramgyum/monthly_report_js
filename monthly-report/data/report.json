@@ -1,13 +1,13 @@
 {
   "2026-03": {
-    "executiveSummary": "Product Team is making progress on AI-driven capabilities, with the AI Assistant and Medical Analyzer emerging as core differentiators; however, user engagement remains the primary gap requiring immediate focus.\n\nOver the past month, the platform continued advancing toward its AI-driven vision, with meaningful progress across core product capabilities and partner initiatives.\n\nUser activity shows early positive signals, including growth in registrations and requests. However, engagement depth remains low, indicating friction in activation, onboarding, and overall user experience.\n\nDelivery timelines remain under pressure due to the adoption of new AI-driven workflows and cross-team dependencies. These challenges are expected to stabilize as processes mature.\n\nStrategic collaboration with partners (BCC, ABTA) continues to validate product direction and long-term opportunity, though impact remains dependent on execution consistency.\n\nThe SR&ED FY2025 cycle has been successfully completed, enabling focus on FY2026 initiatives and continued product development.\n\nPartner collaboration (BCC, ABTA) continues to validate product direction and future opportunities, though impact remains dependent on execution readiness and delivery consistency.",
+    "executiveSummary": "Product Team is making progress on AI-driven capabilities, with the AI Assistant and Medical Analyzer emerging as core differentiators; however, user engagement remains the primary gap requiring immediate focus.\n\nOver the past month, the platform continued advancing toward its AI-driven vision, with meaningful progress across core product capabilities and partner initiatives.\n\nUser activity shows early positive signals, including growth in registrations and requests. However, engagement depth remains low, indicating friction in activation, onboarding, and overall user experience.\n\nDelivery timelines remain under pressure due to the adoption of new AI-driven workflows and cross-team dependencies. These challenges are expected to stabilize as processes mature.\n\nStrategic collaboration with partners (BCC, ABTA) continues to validate product direction and long-term opportunity, though impact remains dependent on execution consistency.\n\nThe SR&ED FY2025 cycle has been successfully completed, enabling focus on FY2026 initiatives and continued product development.",
     "kpis": [
       {
         "id": "0ygluempjtnmnl3e68x",
         "label": "Monthly Users - Study Finder",
         "value": "239",
         "prevValue": "179",
-        "sub": "Registered"
+        "sub": " All platforms"
       },
       {
         "id": "icsjatrri1emnl96f49",
@@ -16,7 +16,7 @@
         "prevValue": "41",
         "prevLabel": "Prev",
         "nowLabel": "Now",
-        "sub": ""
+        "sub": " All platforms"
       },
       {
         "id": "h3y26o1r4umnl97lgf",
@@ -25,7 +25,7 @@
         "prevValue": "73",
         "prevLabel": "Prev",
         "nowLabel": "Now",
-        "sub": ""
+        "sub": "All time"
       },
       {
         "id": "62pwoi50apnmnl98695",
@@ -34,7 +34,7 @@
         "prevValue": "11326",
         "prevLabel": "Prev",
         "nowLabel": "Now",
-        "sub": ""
+        "sub": "Active Studies"
       }
     ],
     "insights": [
@@ -77,7 +77,7 @@
     "delivery": [
       {
         "id": "vplndr50gjkmnl872e4",
-        "title": "Vide Content Integartion to Learning Center ",
+        "title": "Video Content Integartion to Learning Center ",
         "status": "done",
         "priority": "highest",
         "notes": "Core capabilities under development; early delivery phase focused on validating engagement and refining functionality."
@@ -126,7 +126,7 @@
       },
       {
         "id": "tkuy6xfzmjmnl8a9w3",
-        "title": "Integration New Strudies - Pediatric Cancer ",
+        "title": "Integration New Studies - Pediatric Cancer ",
         "status": "done",
         "priority": "low",
         "notes": "Integrated 800+ studies for pediatrc cancer patient resirece moduel "
@@ -187,10 +187,10 @@
     "risks": [
       {
         "id": "1xy18f2prnaimnl6p167",
-        "text": "1111",
-        "severity": "medium",
-        "mitigation": "111",
-        "owner": ""
+        "text": "Low engagement",
+        "severity": "high",
+        "mitigation": "Integrate new features to improve onboarding and overall user experience.",
+        "owner": "Product"
       }
     ],
     "partners": [],
@@ -209,7 +209,7 @@
       },
       {
         "id": "bprr35bba64mnl7knc3",
-        "title": "AI Caregiveer Challenge",
+        "title": "AI Caregiver Challenge",
         "description": "",
         "items": [
           {
