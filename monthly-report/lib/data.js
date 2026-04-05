@@ -27,9 +27,9 @@ export const IMPACT_CONFIG = {
 };
 
 export const DIRECTION_CONFIG = {
-  positive: { label: "↑ Positive", cls: BADGE.positive },
-  neutral:  { label: "→ Neutral",  cls: BADGE.neutral  },
-  negative: { label: "↓ Negative", cls: BADGE.negative },
+  positive: { label: "↑ Improving", cls: BADGE.positive },
+  neutral:  { label: "→ Stable",    cls: BADGE.neutral  },
+  negative: { label: "↓ Declining", cls: BADGE.negative },
 };
 
 export const STATUS_CONFIG = {
