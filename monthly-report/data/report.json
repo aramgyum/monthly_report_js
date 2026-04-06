@@ -175,7 +175,7 @@
         "id": "97qys2ciee8mnlzun14",
         "text": "Delivery delays from workflow changes",
         "severity": "high",
-        "mitigation": "Daily team sync reinstated scope frozen backlog items deprioritized to protect core delivery",
+        "mitigation": "Daily team sync reinstated; scope frozen; backlog items deprioritized to protect core delivery.",
         "owner": "Engineering"
       },
       {
